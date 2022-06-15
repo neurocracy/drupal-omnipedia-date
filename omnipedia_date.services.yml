@@ -29,7 +29,7 @@ services:
 
   # Event subscriber to update current date if a wiki page node is being viewed.
   omnipedia_date.kernel_set_current_date_event_subscriber:
-    class: Drupal\omnipedia_core\EventSubscriber\Kernel\SetCurrentDateEventSubscriber
+    class: Drupal\omnipedia_date\EventSubscriber\Kernel\SetCurrentDateEventSubscriber
     arguments:
       - '@current_route_match'
       - '@omnipedia.timeline'
