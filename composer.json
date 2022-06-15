@@ -9,5 +9,9 @@
       "homepage": "https://ambientimpact.com/",
       "role": "Developer"
     }
-  ]
+  ],
+  "require": {
+    "php": "^8",
+    "drupal/hook_event_dispatcher": "^3.0"
+  }
 }

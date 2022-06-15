@@ -1,0 +1,50 @@
+services:
+
+  # Omnipedia dates cache context.
+  cache_context.omnipedia_dates:
+    class: Drupal\omnipedia_date\Cache\Context\DatesCacheContext
+    arguments:
+      - '@omnipedia.timeline'
+    tags:
+      - { name: cache.context }
+
+  # Event subscriber to update the default date when config is updated.
+  omnipedia_date.config_update_default_date_event_subscriber:
+    class: Drupal\omnipedia_date\EventSubscriber\Config\UpdateDefaultDateEventSubscriber
+    arguments:
+      - '@entity_type.manager'
+      - '@omnipedia.timeline'
+    tags:
+      - { name: 'event_subscriber', priority: 200 }
+
+  # Event subscriber to update defined dates on wiki node entity changes.
+  omnipedia_date.entity_update_defined_dates_event_subscriber:
+    class: Drupal\omnipedia_date\EventSubscriber\Entity\UpdateDefinedDatesEventSubscriber
+    arguments:
+      - '@omnipedia.timeline'
+      - '@omnipedia.wiki_node_resolver'
+      - '@omnipedia.wiki_node_tracker'
+    tags:
+      - { name: 'event_subscriber' }
+
+  # Event subscriber to update current date if a wiki page node is being viewed.
+  omnipedia_date.kernel_set_current_date_event_subscriber:
+    class: Drupal\omnipedia_core\EventSubscriber\Kernel\SetCurrentDateEventSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@omnipedia.timeline'
+      - '@omnipedia.wiki_node_resolver'
+      - '@omnipedia.wiki_node_route'
+    tags:
+      - { name: 'event_subscriber' }
+
+  # The Omnipedia timeline service.
+  omnipedia.timeline:
+    class: Drupal\omnipedia_date\Service\Timeline
+    arguments:
+      - '@omnipedia.wiki_node_main_page'
+      - '@omnipedia.wiki_node_resolver'
+      - '@omnipedia.wiki_node_tracker'
+      - '@session'
+      - '@state'
+      - '@string_translation'

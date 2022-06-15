@@ -3,3 +3,14 @@ type: module
 description: Provides date-related functionality for Omnipedia.
 package: Omnipedia
 core_version_requirement: ^9
+
+dependencies:
+  - drupal:datetime
+  - drupal:node
+  - hook_event_dispatcher:core_event_dispatcher
+  - omnipedia_core:omnipedia_core
+
+config_devel:
+  install:
+    - core.date_format.omnipedia_long
+    - core.date_format.omnipedia_short
