@@ -62,3 +62,9 @@ and formatters.
 Note that this does not does not contain the framework to manage the simulated
 wiki pages (Drupal nodes) themselves; that can be found in the [`omnipedia_core`
 module](https://github.com/neurocracy/drupal-omnipedia-core).
+
+----
+
+# Planned improvements
+
+* [Refactor out Timeline date object building, comparison, and formatting](https://github.com/neurocracy/drupal-omnipedia-date/issues/1).
