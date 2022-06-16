@@ -58,3 +58,7 @@ This contains most of the logic that underpins the simulated date/revision
 system for Omnipedia. It includes services, event subscribers, a cache context,
 and various plug-ins related to the date system, including a field type, widget,
 and formatters.
+
+Note that this does not does not contain the framework to manage the simulated
+wiki pages (Drupal nodes) themselves; that can be found in the [`omnipedia_core`
+module](https://github.com/neurocracy/drupal-omnipedia-core).
