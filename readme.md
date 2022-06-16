@@ -49,3 +49,12 @@ Then, in your root ```composer.json```, add the following to the
 Then, in your project's root, run ```composer require
 "drupal/omnipedia_date:3.x-dev@dev"``` to have Composer install the module
 and its required dependencies for you.
+
+----
+
+# Description
+
+This contains most of the logic that underpins the simulated date/revision
+system for Omnipedia. It includes services, event subscribers, a cache context,
+and various plug-ins related to the date system, including a field type, widget,
+and formatters.
