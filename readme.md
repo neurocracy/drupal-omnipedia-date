@@ -1,5 +1,5 @@
-This contains the source files for the "*Omnipedia - Date*" Drupal module,
-which provides date-related functionality for
+This contains the source files for the "*Omnipedia - Date*" Drupal module, which
+provides the simulated date framework and related functionality for
 [Omnipedia](https://omnipedia.app/).
 
 ⚠️⚠️⚠️ ***Here be potential spoilers. Proceed at your own risk.*** ⚠️⚠️⚠️
