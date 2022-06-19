@@ -38,6 +38,14 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  # Event subscriber to define Omnipedia date Views plug-ins.
+  omnipedia_date.views_data_omnipedia_date_event_subscriber:
+    class: Drupal\omnipedia_date\EventSubscriber\Views\ViewsDataOmnipediaDateEventSubscriber
+    arguments:
+      - '@string_translation'
+    tags:
+      - { name: 'event_subscriber' }
+
   # The Omnipedia timeline service.
   omnipedia.timeline:
     class: Drupal\omnipedia_date\Service\Timeline
