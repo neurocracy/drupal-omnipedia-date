@@ -16,6 +16,25 @@ part of this codebase is useful or will inspire someone out there.
 
 ----
 
+# Description
+
+This contains most of the logic that underpins the simulated date/revision
+system for Omnipedia. It includes services, event subscribers, a cache context,
+and various plug-ins related to the date system, including a field type, widget,
+and formatters.
+
+Note that this does not does not contain the framework to manage the simulated
+wiki pages (Drupal nodes) themselves; that can be found in the [`omnipedia_core`
+module](https://github.com/neurocracy/drupal-omnipedia-core).
+
+----
+
+# Planned improvements
+
+* [Refactor out Timeline date object building, comparison, and formatting](https://github.com/neurocracy/drupal-omnipedia-date/issues/1).
+
+----
+
 # Requirements
 
 * [Drupal 9](https://www.drupal.org/download) ([Drupal 8 is end-of-life](https://www.drupal.org/psa-2021-11-30))
@@ -49,22 +68,3 @@ Then, in your root ```composer.json```, add the following to the
 Then, in your project's root, run ```composer require
 "drupal/omnipedia_date:3.x-dev@dev"``` to have Composer install the module
 and its required dependencies for you.
-
-----
-
-# Description
-
-This contains most of the logic that underpins the simulated date/revision
-system for Omnipedia. It includes services, event subscribers, a cache context,
-and various plug-ins related to the date system, including a field type, widget,
-and formatters.
-
-Note that this does not does not contain the framework to manage the simulated
-wiki pages (Drupal nodes) themselves; that can be found in the [`omnipedia_core`
-module](https://github.com/neurocracy/drupal-omnipedia-core).
-
-----
-
-# Planned improvements
-
-* [Refactor out Timeline date object building, comparison, and formatting](https://github.com/neurocracy/drupal-omnipedia-date/issues/1).
