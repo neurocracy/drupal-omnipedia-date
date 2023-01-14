@@ -43,6 +43,12 @@ module](https://github.com/neurocracy/drupal-omnipedia-core).
 
 * [Composer](https://getcomposer.org/)
 
+## Drupal dependencies
+
+Follow the Composer installation instructions for these dependencies first:
+
+* The [`omnipedia_core` module](https://github.com/neurocracy/drupal-omnipedia-core).
+
 ----
 
 # Installation
