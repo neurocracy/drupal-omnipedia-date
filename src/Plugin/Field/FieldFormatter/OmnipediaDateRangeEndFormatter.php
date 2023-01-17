@@ -35,7 +35,7 @@ class OmnipediaDateRangeEndFormatter extends FormatterBase {
    *
    * @var \Drupal\omnipedia_date\Service\TimelineInterface
    */
-  protected $timeline;
+  protected TimelineInterface $timeline;
 
   /**
    * {@inheritdoc}

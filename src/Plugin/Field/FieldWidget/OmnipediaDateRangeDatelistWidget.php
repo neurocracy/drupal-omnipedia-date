@@ -39,7 +39,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
    *
    * @var \Drupal\omnipedia_date\Service\TimelineInterface
    */
-  protected $timeline;
+  protected TimelineInterface $timeline;
 
   /**
    * {@inheritdoc}
