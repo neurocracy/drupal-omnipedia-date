@@ -25,7 +25,7 @@ class DatesCacheContext implements CalculatedCacheContextInterface {
   protected TimelineInterface $timeline;
 
   /**
-   * Service constructor; saves dependencies.
+   * Constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
