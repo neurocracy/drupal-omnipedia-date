@@ -9,7 +9,7 @@ use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRouteInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -91,10 +91,10 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
   /**
    * Update the current date if a wiki page node is found in the route params.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-   *   Symfony response event object.
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   *   Symfony request event object.
    */
-  public function kernelRequest(GetResponseEvent $event): void {
+  public function kernelRequest(RequestEvent $event): void {
     // Bail if this is not a node page to avoid false positives.
     if (!$this->wikiNodeRoute->isWikiNodeViewRouteName(
       $this->currentRouteMatch->getRouteName()

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_date\EventSubscriber\Entity;
 
-use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\core_event_dispatcher\EntityHookEvents;
 use Drupal\core_event_dispatcher\Event\Entity\AbstractEntityEvent;
 use Drupal\core_event_dispatcher\Event\Entity\EntityInsertEvent;
 use Drupal\core_event_dispatcher\Event\Entity\EntityUpdateEvent;
@@ -67,9 +67,9 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      HookEventDispatcherInterface::ENTITY_INSERT => 'updateDefinedDates',
-      HookEventDispatcherInterface::ENTITY_UPDATE => 'updateDefinedDates',
-      HookEventDispatcherInterface::ENTITY_DELETE => 'updateDefinedDates',
+      EntityHookEvents::ENTITY_INSERT => 'updateDefinedDates',
+      EntityHookEvents::ENTITY_UPDATE => 'updateDefinedDates',
+      EntityHookEvents::ENTITY_DELETE => 'updateDefinedDates',
     ];
   }
 

@@ -6,9 +6,9 @@ namespace Drupal\omnipedia_date\EventSubscriber\Views;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\hook_event_dispatcher\HookEventDispatcherInterface;
 use Drupal\omnipedia_core\Entity\Node;
 use Drupal\views_event_dispatcher\Event\Views\ViewsDataEvent;
+use Drupal\views_event_dispatcher\ViewsHookEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -36,7 +36,7 @@ class ViewsDataOmnipediaDateEventSubscriber implements EventSubscriberInterface 
    */
   public static function getSubscribedEvents() {
     return [
-      HookEventDispatcherInterface::VIEWS_DATA => 'onViewsData',
+      ViewsHookEvents::VIEWS_DATA => 'onViewsData',
     ];
   }
 
