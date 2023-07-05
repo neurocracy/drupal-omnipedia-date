@@ -12,6 +12,8 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\omnipedia_core\Service\WikiNodeMainPageInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
+use Drupal\omnipedia_date\PluginCollection\OmnipediaDateLazyPluginCollection;
+use Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -76,6 +78,13 @@ class Timeline implements TimelineInterface {
    *   Uses this constant to read dates from state storage.
    */
   protected const DEFINED_DATES_STATE_KEY = 'omnipedia.defined_dates';
+
+  /**
+   * The Omnipedia Date lazy plug-in collection.
+   *
+   * @var \Drupal\omnipedia_date\PluginCollection\OmnipediaDateLazyPluginCollection
+   */
+  protected OmnipediaDateLazyPluginCollection $datePluginCollection;
 
   /**
    * A cache of created date objects.
@@ -146,6 +155,9 @@ class Timeline implements TimelineInterface {
    * @param \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface $wikiNodeTracker
    *   The Omnipedia wiki node tracker service.
    *
+   * @param \Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface $datePluginManager
+   *   The Omnipedia Date plug-in manager.
+   *
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
    *   The Symfony session service.
    *
@@ -159,10 +171,17 @@ class Timeline implements TimelineInterface {
     protected readonly WikiNodeMainPageInterface $wikiNodeMainPage,
     protected readonly WikiNodeResolverInterface $wikiNodeResolver,
     protected readonly WikiNodeTrackerInterface  $wikiNodeTracker,
+    protected readonly OmnipediaDateManagerInterface $datePluginManager,
     protected readonly SessionInterface          $session,
     protected readonly StateInterface            $stateManager,
     protected $stringTranslation,
-  ) {}
+  ) {
+  
+    $this->datePluginCollection = new OmnipediaDateLazyPluginCollection(
+      $this->datePluginManager
+    );
+
+  }
 
   /**
    * Find and set the current date if it hasn't yet been set.
@@ -308,28 +327,36 @@ class Timeline implements TimelineInterface {
         }
       }
 
-      // If a valid and error-free date object already exists in the cache for
-      // this $date string, return it.
-      if (isset($this->dateObjectCache[$date])) {
-        return $this->dateObjectCache[$date];
+      if (!$this->datePluginCollection->has($date)) {
+
+        $this->datePluginCollection->addInstanceId('date', ['date' => $date]);
+
       }
 
-      $dateObject = DrupalDateTime::createFromFormat(
-        self::DATE_FORMAT_STORAGE,
-        $date
-      );
+      return this->datePluginCollection->get($date)->getDateObject();
 
-      if ($dateObject->hasErrors()) {
-        throw new \InvalidArgumentException(
-          'There were one or more errors in constructing a \Drupal\Core\Datetime\DrupalDateTime object:' .
-          "\n" . \implode("\n", $dateObject->getErrors())
-        );
-      }
+      // // If a valid and error-free date object already exists in the cache for
+      // // this $date string, return it.
+      // if (isset($this->dateObjectCache[$date])) {
+      //   return $this->dateObjectCache[$date];
+      // }
 
-      // Save the object to the cache so that we don't have to create it again.
-      $this->dateObjectCache[$date] = $dateObject;
+      // $dateObject = DrupalDateTime::createFromFormat(
+      //   self::DATE_FORMAT_STORAGE,
+      //   $date
+      // );
 
-      return $dateObject;
+      // if ($dateObject->hasErrors()) {
+      //   throw new \InvalidArgumentException(
+      //     'There were one or more errors in constructing a \Drupal\Core\Datetime\DrupalDateTime object:' .
+      //     "\n" . \implode("\n", $dateObject->getErrors())
+      //   );
+      // }
+
+      // // Save the object to the cache so that we don't have to create it again.
+      // $this->dateObjectCache[$date] = $dateObject;
+
+      // return $dateObject;
 
     } else if ($date instanceof DrupalDateTime) {
       if ($date->hasErrors()) {

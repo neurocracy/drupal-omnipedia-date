@@ -8,6 +8,10 @@ services:
     tags:
       - { name: cache.context }
 
+  plugin.manager.omnipedia_date:
+    class: Drupal\omnipedia_date\PluginManager\OmnipediaDateManager
+    parent: default_plugin_manager
+
   # Event subscriber to update the default date when config is updated.
   omnipedia_date.config_update_default_date_event_subscriber:
     class: Drupal\omnipedia_date\EventSubscriber\Config\UpdateDefaultDateEventSubscriber
@@ -53,6 +57,7 @@ services:
       - '@omnipedia.wiki_node_main_page'
       - '@omnipedia.wiki_node_resolver'
       - '@omnipedia.wiki_node_tracker'
+      - '@plugin.manager.omnipedia_date'
       - '@session'
       - '@state'
       - '@string_translation'
