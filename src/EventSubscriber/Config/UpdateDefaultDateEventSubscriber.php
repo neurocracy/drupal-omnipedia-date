@@ -23,14 +23,7 @@ class UpdateDefaultDateEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\node\NodeStorageInterface
    */
-  protected NodeStorageInterface $nodeStorage;
-
-  /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
+  protected readonly NodeStorageInterface $nodeStorage;
 
   /**
    * Event subscriber constructor; saves dependencies.
@@ -43,10 +36,9 @@ class UpdateDefaultDateEventSubscriber implements EventSubscriberInterface {
    */
   public function __construct(
     EntityTypeManagerInterface  $entityTypeManager,
-    TimelineInterface           $timeline
+    protected readonly TimelineInterface $timeline,
   ) {
-    $this->nodeStorage  = $entityTypeManager->getStorage('node');
-    $this->timeline     = $timeline;
+    $this->nodeStorage = $entityTypeManager->getStorage('node');
   }
 
   /**

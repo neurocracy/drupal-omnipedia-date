@@ -25,34 +25,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Drupal current route match service.
-   *
-   * @var \Drupal\Core\Routing\StackedRouteMatchInterface
-   */
-  protected StackedRouteMatchInterface $currentRouteMatch;
-
-  /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
-   * The Omnipedia wiki node resolver service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeResolverInterface
-   */
-  protected WikiNodeResolverInterface $wikiNodeResolver;
-
-  /**
-   * The Omnipedia wiki node route service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeRouteInterface
-   */
-  protected WikiNodeRouteInterface $wikiNodeRoute;
-
-  /**
    * Event subscriber constructor; saves dependencies.
    *
    * @param \Drupal\Core\Routing\StackedRouteMatchInterface $currentRouteMatch
@@ -68,16 +40,11 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
    *   The Omnipedia wiki node route service.
    */
   public function __construct(
-    StackedRouteMatchInterface  $currentRouteMatch,
-    TimelineInterface           $timeline,
-    WikiNodeResolverInterface   $wikiNodeResolver,
-    WikiNodeRouteInterface      $wikiNodeRoute
-  ) {
-    $this->currentRouteMatch  = $currentRouteMatch;
-    $this->timeline           = $timeline;
-    $this->wikiNodeResolver   = $wikiNodeResolver;
-    $this->wikiNodeRoute      = $wikiNodeRoute;
-  }
+    protected readonly StackedRouteMatchInterface  $currentRouteMatch,
+    protected readonly TimelineInterface           $timeline,
+    protected readonly WikiNodeResolverInterface   $wikiNodeResolver,
+    protected readonly WikiNodeRouteInterface      $wikiNodeRoute,
+  ) {}
 
   /**
    * {@inheritdoc}

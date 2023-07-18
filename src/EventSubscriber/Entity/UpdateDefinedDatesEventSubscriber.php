@@ -20,27 +20,6 @@ use Drupal\core_event_dispatcher\Event\Entity\EntityDeleteEvent;
 class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
-   * The Omnipedia wiki node resolver service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeResolverInterface
-   */
-  protected WikiNodeResolverInterface $wikiNodeResolver;
-
-  /**
-   * The Omnipedia wiki node tracker service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface
-   */
-  protected WikiNodeTrackerInterface $wikiNodeTracker;
-
-  /**
    * Event subscriber constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
@@ -53,14 +32,10 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
    *   The Omnipedia wiki node tracker service.
    */
   public function __construct(
-    TimelineInterface         $timeline,
-    WikiNodeResolverInterface $wikiNodeResolver,
-    WikiNodeTrackerInterface  $wikiNodeTracker
-  ) {
-    $this->timeline         = $timeline;
-    $this->wikiNodeResolver = $wikiNodeResolver;
-    $this->wikiNodeTracker  = $wikiNodeTracker;
-  }
+    protected readonly TimelineInterface         $timeline,
+    protected readonly WikiNodeResolverInterface $wikiNodeResolver,
+    protected readonly WikiNodeTrackerInterface  $wikiNodeTracker,
+  ) {}
 
   /**
    * {@inheritdoc}
