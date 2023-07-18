@@ -8,7 +8,6 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\omnipedia_core\Service\WikiNodeMainPageInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
@@ -79,41 +78,6 @@ class Timeline implements TimelineInterface {
   protected const DEFINED_DATES_STATE_KEY = 'omnipedia.defined_dates';
 
   /**
-   * The Omnipedia wiki node main page service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeMainPageInterface
-   */
-  protected WikiNodeMainPageInterface $wikiNodeMainPage;
-
-  /**
-   * The Omnipedia wiki node resolver service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeResolverInterface
-   */
-  protected WikiNodeResolverInterface $wikiNodeResolver;
-
-  /**
-   * The Omnipedia wiki node tracker service.
-   *
-   * @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface
-   */
-  protected WikiNodeTrackerInterface $wikiNodeTracker;
-
-  /**
-   * The Symfony session service.
-   *
-   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
-   */
-  protected SessionInterface $session;
-
-  /**
-   * The Drupal state system manager.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected StateInterface $stateManager;
-
-  /**
    * A cache of created date objects.
    *
    * These are keyed by their date string representation in 'storage' format.
@@ -171,7 +135,7 @@ class Timeline implements TimelineInterface {
   protected array $definedDates;
 
   /**
-   * Constructs this service object.
+   * Service constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeMainPageInterface $wikiNodeMainPage
    *   The Omnipedia wiki node main page service.
@@ -192,21 +156,13 @@ class Timeline implements TimelineInterface {
    *   The Drupal string translation service.
    */
   public function __construct(
-    WikiNodeMainPageInterface $wikiNodeMainPage,
-    WikiNodeResolverInterface $wikiNodeResolver,
-    WikiNodeTrackerInterface  $wikiNodeTracker,
-    SessionInterface          $session,
-    StateInterface            $stateManager,
-    TranslationInterface      $stringTranslation
-  ) {
-    // Save dependencies.
-    $this->wikiNodeMainPage   = $wikiNodeMainPage;
-    $this->wikiNodeResolver   = $wikiNodeResolver;
-    $this->wikiNodeTracker    = $wikiNodeTracker;
-    $this->session            = $session;
-    $this->stateManager       = $stateManager;
-    $this->stringTranslation  = $stringTranslation;
-  }
+    protected readonly WikiNodeMainPageInterface $wikiNodeMainPage,
+    protected readonly WikiNodeResolverInterface $wikiNodeResolver,
+    protected readonly WikiNodeTrackerInterface  $wikiNodeTracker,
+    protected readonly SessionInterface          $session,
+    protected readonly StateInterface            $stateManager,
+    protected $stringTranslation,
+  ) {}
 
   /**
    * Find and set the current date if it hasn't yet been set.
