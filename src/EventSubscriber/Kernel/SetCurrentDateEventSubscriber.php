@@ -51,7 +51,7 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      KernelEvents::REQUEST => 'kernelRequest',
+      KernelEvents::REQUEST => 'onKernelRequest',
     ];
   }
 
@@ -61,7 +61,8 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
    * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   Symfony request event object.
    */
-  public function kernelRequest(RequestEvent $event): void {
+  public function onKernelRequest(RequestEvent $event): void {
+
     // Bail if this is not a node page to avoid false positives.
     if (!$this->wikiNodeRoute->isWikiNodeViewRouteName(
       $this->currentRouteMatch->getRouteName()
@@ -90,6 +91,7 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
     }
 
     $this->timeline->setCurrentDate($currentDate);
+
   }
 
 }

@@ -67,6 +67,7 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
    *   Calls this method to invoke a rescan of wiki nodes.
    */
   public function updateDefinedDates(AbstractEntityEvent $event) {
+
     /** @var \Drupal\Core\Entity\EntityInterface */
     $entity = $event->getEntity();
 
@@ -88,6 +89,7 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
 
     // Rescan content to build list of defined dates.
     $this->timeline->findDefinedDates();
+
   }
 
 }
