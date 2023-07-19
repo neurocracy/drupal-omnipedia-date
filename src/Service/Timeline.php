@@ -269,10 +269,15 @@ class Timeline implements TimelineInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @todo Figure out why getting the existing default date results in out-of-
+   *   memory errors. Do not re-enable without fixing these, as it can cause
+   *   fatal errors for anonymous users, making the site unusable. Very likely
+   *   some recursion happening here.
    */
   public function setDefaultDate(string|DrupalDateTime $date): void {
 
-    $oldDateObject = $this->getDateObject('default');
+    // $oldDateObject = $this->getDateObject('default');
 
     $newDateObject = $this->getDateObject($date);
 
@@ -288,13 +293,13 @@ class Timeline implements TimelineInterface {
 
     $this->defaultDateObject = $newDateObject;
 
-    // If the date has changed, invalidate the 'omnipedia_dates' cache tag.
-    if (
-      $oldDateObject < $newDateObject ||
-      $oldDateObject > $newDateObject
-    ) {
-      $this->cacheTagsInvalidator->invalidateTags(['omnipedia_dates']);
-    }
+    // // If the date has changed, invalidate the 'omnipedia_dates' cache tag.
+    // if (
+    //   $oldDateObject < $newDateObject ||
+    //   $oldDateObject > $newDateObject
+    // ) {
+    //   $this->cacheTagsInvalidator->invalidateTags(['omnipedia_dates']);
+    // }
 
   }
 
