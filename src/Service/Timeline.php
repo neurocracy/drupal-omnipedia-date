@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_date\Service;
 
-use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -138,9 +137,6 @@ class Timeline implements TimelineInterface {
   /**
    * Service constructor; saves dependencies.
    *
-   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
-   *   The Drupal cache tags invalidator service.
-   *
    * @param \Drupal\omnipedia_core\Service\WikiNodeMainPageInterface $wikiNodeMainPage
    *   The Omnipedia wiki node main page service.
    *
@@ -160,12 +156,11 @@ class Timeline implements TimelineInterface {
    *   The Drupal string translation service.
    */
   public function __construct(
-    protected readonly CacheTagsInvalidatorInterface  $cacheTagsInvalidator,
-    protected readonly WikiNodeMainPageInterface      $wikiNodeMainPage,
-    protected readonly WikiNodeResolverInterface      $wikiNodeResolver,
-    protected readonly WikiNodeTrackerInterface       $wikiNodeTracker,
-    protected readonly SessionInterface               $session,
-    protected readonly StateInterface                 $stateManager,
+    protected readonly WikiNodeMainPageInterface $wikiNodeMainPage,
+    protected readonly WikiNodeResolverInterface $wikiNodeResolver,
+    protected readonly WikiNodeTrackerInterface  $wikiNodeTracker,
+    protected readonly SessionInterface          $session,
+    protected readonly StateInterface            $stateManager,
     protected $stringTranslation,
   ) {}
 
@@ -269,21 +264,11 @@ class Timeline implements TimelineInterface {
 
   /**
    * {@inheritdoc}
-   *
-   * @todo Figure out why getting the existing default date results in out-of-
-   *   memory errors. Do not re-enable without fixing these, as it can cause
-   *   fatal errors for anonymous users, making the site unusable. Very likely
-   *   some recursion happening here.
    */
   public function setDefaultDate(string|DrupalDateTime $date): void {
+    $dateObject = $this->getDateObject($date);
 
-    // $oldDateObject = $this->getDateObject('default');
-
-    $newDateObject = $this->getDateObject($date);
-
-    $this->defaultDateString = $this->getDateFormatted(
-      $newDateObject, 'storage'
-    );
+    $this->defaultDateString = $this->getDateFormatted($dateObject, 'storage');
 
     // Save to state storage.
     $this->stateManager->set(
@@ -291,16 +276,7 @@ class Timeline implements TimelineInterface {
       $this->defaultDateString
     );
 
-    $this->defaultDateObject = $newDateObject;
-
-    // // If the date has changed, invalidate the 'omnipedia_dates' cache tag.
-    // if (
-    //   $oldDateObject < $newDateObject ||
-    //   $oldDateObject > $newDateObject
-    // ) {
-    //   $this->cacheTagsInvalidator->invalidateTags(['omnipedia_dates']);
-    // }
-
+    $this->defaultDateObject = $dateObject;
   }
 
   /**
