@@ -105,14 +105,7 @@ class Timeline implements TimelineInterface {
    *
    * @var string
    */
-  protected string $defaultDateString = '';
-
-  /**
-   * The default date as a DrupalDateTime object.
-   *
-   * @var \Drupal\Core\Datetime\DrupalDateTime
-   */
-  protected DrupalDateTime $defaultDateObject;
+  protected string $defaultDate = '';
 
   /**
    * Dates defined by content.
@@ -195,7 +188,7 @@ class Timeline implements TimelineInterface {
     } else {
       $this->findDefaultDate();
 
-      $date = $this->defaultDateString;
+      $date = $this->defaultDate;
     }
 
     $this->setCurrentDate($date);
@@ -233,7 +226,7 @@ class Timeline implements TimelineInterface {
    */
   protected function findDefaultDate(): void {
     // Don't do this twice.
-    if (!empty($this->defaultDateString)) {
+    if (!empty($this->defaultDate)) {
       return;
     }
 
@@ -278,15 +271,14 @@ class Timeline implements TimelineInterface {
   public function setDefaultDate(string|DrupalDateTime $date): void {
     $dateObject = $this->getDateObject($date);
 
-    $this->defaultDateString = $this->getDateFormatted($dateObject, 'storage');
+    $this->defaultDate = $this->getDateFormatted($dateObject, 'storage');
 
     // Save to state storage.
     $this->stateManager->set(
       self::DEFAULT_DATE_STATE_KEY,
-      $this->defaultDateString
+      $this->defaultDate
     );
 
-    $this->defaultDateObject = $dateObject;
   }
 
   /**
@@ -302,9 +294,12 @@ class Timeline implements TimelineInterface {
         return $this->currentDateObject;
 
       } else if ($date === 'default') {
+
         $this->findDefaultDate();
 
-        return $this->defaultDateObject;
+        return $this->datePluginCollection->get(
+          $this->defaultDate
+        )->getDateObject();
 
       } else if ($date === 'first' || $date === 'last') {
         /** @var array */
