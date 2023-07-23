@@ -15,20 +15,18 @@ interface TimelineInterface {
   /**
    * Validate and set the current date.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $date
-   *   Either a string that can be parsed by
-   *   \Drupal\Core\Datetime\DrupalDateTime or an instance of said class.
+   * @param string $date
+   *   A date string in the storage format.
    */
-  public function setCurrentDate(string|DrupalDateTime $date): void;
+  public function setCurrentDate(string $date): void;
 
   /**
    * Validate and set the default date.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $date
-   *   Either a string that can be parsed by
-   *   \Drupal\Core\Datetime\DrupalDateTime or an instance of said class.
+   * @param string $date
+   *   A date string in the storage format.
    */
-  public function setDefaultDate(string|DrupalDateTime $date): void;
+  public function setDefaultDate(string $date): void;
 
   /**
    * Get a date object for a date.
@@ -91,8 +89,6 @@ interface TimelineInterface {
    *   - A string that can be parsed by \Drupal\Core\Datetime\DrupalDateTime
    *     without errors.
    *
-   *   - An instance of \Drupal\Core\Datetime\DrupalDateTime.
-   *
    * @param string $format
    *   One of:
    *
@@ -128,7 +124,7 @@ interface TimelineInterface {
    *   Exception thrown when the $format parameter isn't an expected value.
    */
   public function getDateFormatted(
-    string|DrupalDateTime $date = 'current', string $format = 'long'
+    string $date = 'current', string $format = 'long'
   ): string|TranslatableMarkup;
 
   /**

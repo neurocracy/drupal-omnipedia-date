@@ -176,10 +176,9 @@ class Timeline implements TimelineInterface {
   /**
    * {@inheritdoc}
    */
-  public function setCurrentDate(string|DrupalDateTime $date): void {
-    $dateObject = $this->getDateObject($date);
+  public function setCurrentDate(string $date): void {
 
-    $this->currentDate = $this->getDateFormatted($dateObject, 'storage');
+    $this->currentDate = $this->dateCollection->get($date)->format('storage');
 
     // Save to session storage if headers haven't been sent yet - checking this
     // is necessary to avoid Symfony throwing an error.
@@ -246,10 +245,9 @@ class Timeline implements TimelineInterface {
   /**
    * {@inheritdoc}
    */
-  public function setDefaultDate(string|DrupalDateTime $date): void {
-    $dateObject = $this->getDateObject($date);
+  public function setDefaultDate(string $date): void {
 
-    $this->defaultDate = $this->getDateFormatted($dateObject, 'storage');
+    $this->defaultDate = $this->dateCollection->get($date)->format('storage');
 
     // Save to state storage.
     $this->stateManager->set(
@@ -315,41 +313,31 @@ class Timeline implements TimelineInterface {
    * {@inheritdoc}
    */
   public function getDateFormatted(
-    string|DrupalDateTime $date = 'current', string $format = 'long'
+    string $date = 'current', string $format = 'long'
   ): string|TranslatableMarkup {
+
     if ($date === 'first') {
       return $this->t('First date');
-    }
-    if ($date === 'last') {
+
+    } else if ($date === 'last') {
       return $this->t('Last date');
+
+    } else if ($date === 'current') {
+
+      $this->findCurrentDate();
+
+      $date = $this->currentDate;
+
+    } else if ($date === 'default') {
+
+      $this->findDefaultDate();
+
+      $date = $this->defaultDate;
+
     }
 
-    switch ($format) {
-      case 'storage':
-        $formatString = self::DATE_FORMAT_STORAGE;
+    return $this->dateCollection->get($date)->format($format);
 
-        break;
-
-      case 'html':
-        $formatString = self::DATE_FORMAT_HTML;
-
-        break;
-
-      case 'long':
-        $formatString = self::DATE_FORMAT_LONG;
-
-        break;
-
-      case 'short':
-        $formatString = self::DATE_FORMAT_SHORT;
-
-        break;
-
-      default:
-        throw new \InvalidArgumentException('The $format parameter must be one of "storage", "long", or "short".');
-    }
-
-    return $this->getDateObject($date)->format($formatString);
   }
 
   /**
