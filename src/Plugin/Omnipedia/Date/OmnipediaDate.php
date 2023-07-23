@@ -11,7 +11,7 @@ use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 /**
  * The Omnipedia Date plug-in.
  *
- * @OmnipediaAttachedData(
+ * @OmnipediaDate(
  *   id           = "date",
  *   title        = @Translation("Omnipedia Date"),
  *   description  = @Translation("The Omnipedia Date plug-in.")
