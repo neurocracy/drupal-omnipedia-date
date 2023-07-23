@@ -12,8 +12,7 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\omnipedia_core\Service\WikiNodeMainPageInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
-use Drupal\omnipedia_date\PluginCollection\OmnipediaDateLazyPluginCollection;
-use Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface;
+use Drupal\omnipedia_date\Service\DateCollectionInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -80,13 +79,6 @@ class Timeline implements TimelineInterface {
   protected const DEFINED_DATES_STATE_KEY = 'omnipedia.defined_dates';
 
   /**
-   * The Omnipedia Date lazy plug-in collection.
-   *
-   * @var \Drupal\omnipedia_date\PluginCollection\OmnipediaDateLazyPluginCollection
-   */
-  protected OmnipediaDateLazyPluginCollection $datePluginCollection;
-
-  /**
    * The current date as a string.
    *
    * @var string
@@ -145,20 +137,14 @@ class Timeline implements TimelineInterface {
    *   The Drupal string translation service.
    */
   public function __construct(
+    protected readonly DateCollectionInterface    $dateCollection,
     protected readonly WikiNodeMainPageInterface $wikiNodeMainPage,
     protected readonly WikiNodeResolverInterface $wikiNodeResolver,
     protected readonly WikiNodeTrackerInterface  $wikiNodeTracker,
-    protected readonly OmnipediaDateManagerInterface $datePluginManager,
     protected readonly SessionInterface          $session,
     protected readonly StateInterface            $stateManager,
     protected $stringTranslation,
-  ) {
-  
-    $this->datePluginCollection = new OmnipediaDateLazyPluginCollection(
-      $this->datePluginManager
-    );
-
-  }
+  ) {}
 
   /**
    * Find and set the current date if it hasn't yet been set.
@@ -284,7 +270,7 @@ class Timeline implements TimelineInterface {
 
         $this->findCurrentDate();
 
-        return $this->datePluginCollection->get(
+        return $this->dateCollection->get(
           $this->currentDate
         )->getDateObject();
 
@@ -292,7 +278,7 @@ class Timeline implements TimelineInterface {
 
         $this->findDefaultDate();
 
-        return $this->datePluginCollection->get(
+        return $this->dateCollection->get(
           $this->defaultDate
         )->getDateObject();
 
@@ -308,16 +294,7 @@ class Timeline implements TimelineInterface {
         }
       }
 
-      if (!$this->datePluginCollection->has($date)) {
-
-        $this->datePluginCollection->addInstanceId($date, [
-          'id'    => 'date:' . $date,
-          'date'  => $date,
-        ]);
-
-      }
-
-      return $this->datePluginCollection->get($date)->getDateObject();
+      return $this->dateCollection->get($date)->getDateObject();
 
     } else if ($date instanceof DrupalDateTime) {
       if ($date->hasErrors()) {

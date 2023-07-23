@@ -8,6 +8,11 @@ services:
     tags:
       - { name: cache.context }
 
+  omnipedia_date.date_collection:
+    class: Drupal\omnipedia_date\Service\DateCollection
+    arguments:
+      - '@plugin.manager.omnipedia_date'
+
   plugin.manager.omnipedia_date:
     class: Drupal\omnipedia_date\PluginManager\OmnipediaDateManager
     parent: default_plugin_manager
@@ -54,10 +59,10 @@ services:
   omnipedia.timeline:
     class: Drupal\omnipedia_date\Service\Timeline
     arguments:
+      - '@omnipedia_date.date_collection'
       - '@omnipedia.wiki_node_main_page'
       - '@omnipedia.wiki_node_resolver'
       - '@omnipedia.wiki_node_tracker'
-      - '@plugin.manager.omnipedia_date'
       - '@session'
       - '@state'
       - '@string_translation'
