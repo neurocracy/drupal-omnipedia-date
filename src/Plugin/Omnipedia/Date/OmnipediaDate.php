@@ -25,7 +25,7 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
    *
    * @var \Drupal\Core\Datetime\DrupalDateTime
    */
-  protected DrupalDateTime $dateObject;
+  protected readonly DrupalDateTime $dateObject;
 
   /**
    * Constructor.
