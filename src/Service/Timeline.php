@@ -329,11 +329,14 @@ class Timeline implements TimelineInterface {
 
       if (!$this->datePluginCollection->has($date)) {
 
-        $this->datePluginCollection->addInstanceId('date', ['date' => $date]);
+        $this->datePluginCollection->addInstanceId($date, [
+          'id'    => 'date:' . $date,
+          'date'  => $date,
+        ]);
 
       }
 
-      return this->datePluginCollection->get($date)->getDateObject();
+      return $this->datePluginCollection->get($date)->getDateObject();
 
       // // If a valid and error-free date object already exists in the cache for
       // // this $date string, return it.
