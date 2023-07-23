@@ -9,13 +9,4 @@ use Drupal\Core\Plugin\DefaultLazyPluginCollection;
 /**
  * The Omnipedia Date lazy plug-in collection.
  */
-class OmnipediaDateLazyPluginCollection extends DefaultLazyPluginCollection {
-
-  /**
-   * The key within the plugin configuration that contains the plugin ID.
-   *
-   * @var string
-   */
-  protected $pluginKey = 'date';
-
-}
+class OmnipediaDateLazyPluginCollection extends DefaultLazyPluginCollection {}
