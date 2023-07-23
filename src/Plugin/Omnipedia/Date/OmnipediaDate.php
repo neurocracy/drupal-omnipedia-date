@@ -14,7 +14,8 @@ use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
  * @OmnipediaDate(
  *   id           = "date",
  *   title        = @Translation("Omnipedia Date"),
- *   description  = @Translation("The Omnipedia Date plug-in.")
+ *   description  = @Translation("The Omnipedia Date plug-in."),
+ *   deriver      = "Drupal\omnipedia_date\Plugin\Deriver\OmnipediaDateDeriver"
  * )
  */
 class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
