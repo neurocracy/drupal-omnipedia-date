@@ -91,14 +91,7 @@ class Timeline implements TimelineInterface {
    *
    * @var string
    */
-  protected string $currentDateString = '';
-
-  /**
-   * The current date as a DrupalDateTime object.
-   *
-   * @var \Drupal\Core\Datetime\DrupalDateTime
-   */
-  protected DrupalDateTime $currentDateObject;
+  protected string $currentDate = '';
 
   /**
    * The default date as a string.
@@ -175,7 +168,7 @@ class Timeline implements TimelineInterface {
    */
   protected function findCurrentDate(): void {
     // Don't do this twice.
-    if (!empty($this->currentDateString)) {
+    if (!empty($this->currentDate)) {
       return;
     }
 
@@ -200,18 +193,17 @@ class Timeline implements TimelineInterface {
   public function setCurrentDate(string|DrupalDateTime $date): void {
     $dateObject = $this->getDateObject($date);
 
-    $this->currentDateString = $this->getDateFormatted($dateObject, 'storage');
+    $this->currentDate = $this->getDateFormatted($dateObject, 'storage');
 
     // Save to session storage if headers haven't been sent yet - checking this
     // is necessary to avoid Symfony throwing an error.
     if (!\headers_sent()) {
       $this->session->set(
         self::CURRENT_DATE_SESSION_KEY,
-        $this->currentDateString
+        $this->currentDate
       );
     }
 
-    $this->currentDateObject = $dateObject;
   }
 
   /**
@@ -289,9 +281,12 @@ class Timeline implements TimelineInterface {
   ): DrupalDateTime {
     if (\is_string($date)) {
       if ($date === 'current') {
+
         $this->findCurrentDate();
 
-        return $this->currentDateObject;
+        return $this->datePluginCollection->get(
+          $this->currentDate
+        )->getDateObject();
 
       } else if ($date === 'default') {
 
