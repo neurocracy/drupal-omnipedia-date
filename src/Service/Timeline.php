@@ -87,15 +87,6 @@ class Timeline implements TimelineInterface {
   protected OmnipediaDateLazyPluginCollection $datePluginCollection;
 
   /**
-   * A cache of created date objects.
-   *
-   * These are keyed by their date string representation in 'storage' format.
-   *
-   * @var array
-   */
-  protected array $dateObjectCache = [];
-
-  /**
    * The current date as a string.
    *
    * @var string
@@ -337,29 +328,6 @@ class Timeline implements TimelineInterface {
       }
 
       return $this->datePluginCollection->get($date)->getDateObject();
-
-      // // If a valid and error-free date object already exists in the cache for
-      // // this $date string, return it.
-      // if (isset($this->dateObjectCache[$date])) {
-      //   return $this->dateObjectCache[$date];
-      // }
-
-      // $dateObject = DrupalDateTime::createFromFormat(
-      //   self::DATE_FORMAT_STORAGE,
-      //   $date
-      // );
-
-      // if ($dateObject->hasErrors()) {
-      //   throw new \InvalidArgumentException(
-      //     'There were one or more errors in constructing a \Drupal\Core\Datetime\DrupalDateTime object:' .
-      //     "\n" . \implode("\n", $dateObject->getErrors())
-      //   );
-      // }
-
-      // // Save the object to the cache so that we don't have to create it again.
-      // $this->dateObjectCache[$date] = $dateObject;
-
-      // return $dateObject;
 
     } else if ($date instanceof DrupalDateTime) {
       if ($date->hasErrors()) {
