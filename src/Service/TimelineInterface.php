@@ -89,6 +89,8 @@ interface TimelineInterface {
    *   - A string that can be parsed by \Drupal\Core\Datetime\DrupalDateTime
    *     without errors.
    *
+   *   - An instance of \Drupal\Core\Datetime\DrupalDateTime.
+   *
    * @param string $format
    *   One of:
    *
@@ -124,7 +126,7 @@ interface TimelineInterface {
    *   Exception thrown when the $format parameter isn't an expected value.
    */
   public function getDateFormatted(
-    string $date = 'current', string $format = 'long'
+    string|DrupalDateTime $date = 'current', string $format = 'long'
   ): string|TranslatableMarkup;
 
   /**

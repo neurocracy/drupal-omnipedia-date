@@ -313,7 +313,7 @@ class Timeline implements TimelineInterface {
    * {@inheritdoc}
    */
   public function getDateFormatted(
-    string $date = 'current', string $format = 'long'
+    string|DrupalDateTime $date = 'current', string $format = 'long'
   ): string|TranslatableMarkup {
 
     if ($date === 'first') {
@@ -336,7 +336,19 @@ class Timeline implements TimelineInterface {
 
     }
 
-    return $this->dateCollection->get($date)->format($format);
+    if ($date instanceof DrupalDateTime) {
+
+      /** @var \Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface */
+      $instance = $this->dateCollection->getFromDrupalDateTime($date);
+
+    } else {
+
+      /** @var \Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface */
+      $instance = $this->dateCollection->get($date);
+
+    }
+
+    return $instance->format($format);
 
   }
 
