@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_date\Service;
 
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -14,6 +14,7 @@ use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
+use Drupal\omnipedia_date\Value\OmnipediaDateRange;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -261,8 +262,8 @@ class Timeline implements TimelineInterface {
    * {@inheritdoc}
    */
   public function getDateObject(
-    string|DrupalDateTime $date = 'current', bool $includeUnpublished = false
-  ): DrupalDateTime {
+    string|DateTimePlus $date = 'current', bool $includeUnpublished = false
+  ): DateTimePlus {
     if (\is_string($date)) {
       if ($date === 'current') {
 
@@ -294,10 +295,10 @@ class Timeline implements TimelineInterface {
 
       return $this->dateCollection->get($date)->getDateObject();
 
-    } else if ($date instanceof DrupalDateTime) {
+    } else if ($date instanceof DateTimePlus) {
       if ($date->hasErrors()) {
         throw new \InvalidArgumentException(
-          'There are one or more errors with the provided \Drupal\Core\Datetime\DrupalDateTime object:' .
+          'There are one or more errors with the provided \Drupal\Component\Datetime\DateTimePlus object:' .
           "\n" . \implode("\n", $date->getErrors())
         );
       }
@@ -305,7 +306,7 @@ class Timeline implements TimelineInterface {
       return $date;
 
     } else {
-      throw new \InvalidArgumentException('The $date parameter must either be a string or an instance of \Drupal\Core\Datetime\DrupalDateTime.');
+      throw new \InvalidArgumentException('The $date parameter must either be a string or an instance of \Drupal\Component\Datetime\DateTimePlus.');
     }
   }
 
@@ -313,7 +314,7 @@ class Timeline implements TimelineInterface {
    * {@inheritdoc}
    */
   public function getDateFormatted(
-    string|DrupalDateTime $date = 'current', string $format = 'long'
+    string|DateTimePlus $date = 'current', string $format = 'long'
   ): string|TranslatableMarkup {
 
     if ($date === 'first') {
@@ -336,10 +337,10 @@ class Timeline implements TimelineInterface {
 
     }
 
-    if ($date instanceof DrupalDateTime) {
+    if ($date instanceof DateTimePlus) {
 
       /** @var \Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface */
-      $instance = $this->dateCollection->getFromDrupalDateTime($date);
+      $instance = $this->dateCollection->getFromDateTimeObject($date);
 
     } else {
 

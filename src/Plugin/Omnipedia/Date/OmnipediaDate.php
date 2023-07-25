@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_date\Plugin\Omnipedia\Date;
 
+use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 
 /**
@@ -21,11 +21,11 @@ use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
 
   /**
-   * The DrupalDateTime object instance this plug-in wraps.
+   * The DateTimePlus object instance this plug-in wraps.
    *
-   * @var \Drupal\Core\Datetime\DrupalDateTime
+   * @var \Drupal\Component\Datetime\DateTimePlus
    */
-  protected readonly DrupalDateTime $dateObject;
+  protected readonly DateTimePlus $dateObject;
 
   /**
    * Constructor.
@@ -33,7 +33,7 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
    * @param array $configuration
    *   A configuration array containing information about the plug-in instance.
    *   This must contain a 'date' key with a string that can be used to build a
-   *   DrupalDateTime object with.
+   *   DateTimePlus object with.
    *
    * @param string $pluginId
    *   The plugin_id for the plug-in instance.
@@ -53,26 +53,26 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
   }
 
   /**
-   * Initialize the DrupalDateTime object for this plug-in instance.
+   * Initialize the DateTimePlus object for this plug-in instance.
    *
    * @param string $date
    *
-   * @return \Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Component\Datetime\DateTimePlus
    *
    * @throws \InvalidArgumentException
-   *   If the DrupalDateTime object reports any errors.
+   *   If the DateTimePlus object reports any errors.
    */
-  protected function initializeDateObject(string $date): DrupalDateTime {
+  protected function initializeDateObject(string $date): DateTimePlus {
 
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
-    $dateObject = DrupalDateTime::createFromFormat(
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
+    $dateObject = DateTimePlus::createFromFormat(
       self::DATE_FORMAT_STORAGE,
       $date
     );
 
     if ($dateObject->hasErrors()) {
       throw new \InvalidArgumentException(
-        'There were one or more errors in constructing a \Drupal\Core\Datetime\DrupalDateTime object:' .
+        'There were one or more errors in constructing a \Drupal\Component\Datetime\DateTimePlus object:' .
         "\n" . \implode("\n", $dateObject->getErrors())
       );
     }
@@ -86,7 +86,7 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
   /**
    * {@inheritdoc}
    */
-  public function getDateObject(): DrupalDateTime {
+  public function getDateObject(): DateTimePlus {
     return $this->dateObject;
   }
 
@@ -97,7 +97,7 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
    *   If $format is not one of the expected values.
    *
    * @todo Should this even throw an exception? What about just passing $format
-   *   to DrupalDateTime::format() if it's not one of our keywords instead?
+   *   to DateTimePlus::format() if it's not one of our keywords instead?
    */
   public function format(string $format): string {
 

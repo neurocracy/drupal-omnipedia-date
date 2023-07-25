@@ -8,7 +8,7 @@ use Drupal\omnipedia_date\PluginCollection\OmnipediaDateLazyPluginCollection;
 use Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface;
 use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Component\Datetime\DateTimePlus;
 
 /**
  * The Omnipedia date collection service.
@@ -61,8 +61,8 @@ class DateCollection implements DateCollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getFromDrupalDateTime(
-    DrupalDateTime $dateTime
+  public function getFromDateTimeObject(
+    DateTimePlus $dateTime
   ): OmnipediaDateInterface {
 
     $date = $dateTime->format(OmnipediaDateInterface::DATE_FORMAT_STORAGE);

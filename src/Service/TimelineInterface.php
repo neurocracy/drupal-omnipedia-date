@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_date\Service;
 
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
@@ -31,7 +31,7 @@ interface TimelineInterface {
   /**
    * Get a date object for a date.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $date
+   * @param string|\Drupal\Component\Datetime\DateTimePlus $date
    *   Must be one of:
    *
    *   - 'current': Indicates the current date is to be used. This is the
@@ -43,19 +43,19 @@ interface TimelineInterface {
    *
    *   - 'last': Indicates that the last defined date is to be used.
    *
-   *   - A string that can be parsed by \Drupal\Core\Datetime\DrupalDateTime
+   *   - A string that can be parsed by \Drupal\Component\Datetime\DateTimePlus
    *     without errors.
    *
-   *   - An instance of \Drupal\Core\Datetime\DrupalDateTime. This reduces
-   *     redundant checks for whether you have a string or a DrupalDateTime
+   *   - An instance of \Drupal\Component\Datetime\DateTimePlus. This reduces
+   *     redundant checks for whether you have a string or a DateTimePlus
    *     object, as passing either into this method with normalize to a
-   *     DrupalDateTime object.
+   *     DateTimePlus object.
    *
    * @param bool $includeUnpublished
    *   Whether to include dates that have only unpublished content. This is used
    *   if $date is 'first' or 'last'. Defaults to false.
    *
-   * @return \Drupal\Core\Datetime\DrupalDateTime
+   * @return \Drupal\Component\Datetime\DateTimePlus
    *   A date object representing $date. If $date was provided as a date object,
    *   it will be returned as-is.
    *
@@ -66,13 +66,13 @@ interface TimelineInterface {
    *   object class.
    */
   public function getDateObject(
-    string|DrupalDateTime $date = 'current', bool $includeUnpublished = false
-  ): DrupalDateTime;
+    string|DateTimePlus $date = 'current', bool $includeUnpublished = false
+  ): DateTimePlus;
 
   /**
    * Get a formatted date.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $date
+   * @param string|\Drupal\Component\Datetime\DateTimePlus $date
    *   Must be one of:
    *
    *   - 'current': Indicates the current date is to be used. This is the
@@ -86,10 +86,10 @@ interface TimelineInterface {
    *
    *   - 'default': Indicates the default date is to be used.
    *
-   *   - A string that can be parsed by \Drupal\Core\Datetime\DrupalDateTime
+   *   - A string that can be parsed by \Drupal\Component\Datetime\DateTimePlus
    *     without errors.
    *
-   *   - An instance of \Drupal\Core\Datetime\DrupalDateTime.
+   *   - An instance of \Drupal\Component\Datetime\DateTimePlus.
    *
    * @param string $format
    *   One of:
@@ -126,7 +126,7 @@ interface TimelineInterface {
    *   Exception thrown when the $format parameter isn't an expected value.
    */
   public function getDateFormatted(
-    string|DrupalDateTime $date = 'current', string $format = 'long'
+    string|DateTimePlus $date = 'current', string $format = 'long'
   ): string|TranslatableMarkup;
 
   /**

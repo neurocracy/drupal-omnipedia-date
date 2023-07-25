@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\omnipedia_date\Plugin\Omnipedia\Date;
 
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**
@@ -45,12 +45,12 @@ interface OmnipediaDateInterface {
   public const DATE_FORMAT_SHORT = 'Y/m/d';
 
   /**
-   * Get the DrupalDateTime object wrapped by this plug-in instance.
+   * Get the DateTimePlus object wrapped by this plug-in instance.
    *
-   * @return \Drupal\Core\Datetime\DrupalDateTime
-   *   The DrupalDateTime object this plug-in instance wraps.
+   * @return \Drupal\Component\Datetime\DateTimePlus
+   *   The DateTimePlus object this plug-in instance wraps.
    */
-  public function getDateObject(): DrupalDateTime;
+  public function getDateObject(): DateTimePlus;
 
   /**
    * Get the date formatted as a string.
