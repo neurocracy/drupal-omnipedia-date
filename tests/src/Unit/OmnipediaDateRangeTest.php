@@ -18,6 +18,8 @@ use Drupal\Tests\UnitTestCase;
  * @group omnipedia
  *
  * @group omnipedia_date
+ *
+ * @see \Drupal\Tests\Component\Datetime\DateTimePlusTest
  */
 class OmnipediaDateRangeTest extends UnitTestCase {
 
