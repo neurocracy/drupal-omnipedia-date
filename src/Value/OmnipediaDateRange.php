@@ -58,4 +58,61 @@ class OmnipediaDateRange implements OmnipediaDateRangeInterface {
     return $this->endDate;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function overlapsDate(DateTimePlus $date): bool {
+
+    return $this->getStartDate() <= $date && $date <= $this->getEndDate();
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function overlapsWithRange(
+    OmnipediaDateRangeInterface $dateRange
+  ): bool {
+
+    // Does our date ranges's start date fall between the other date range's
+    // start and end dates?
+    //
+    //   |----| <-- Us
+    // |----|   <-- Them
+    if (
+      $this->getStartDate() >= $dateRange->getStartDate() &&
+      $this->getStartDate() <= $dateRange->getEndDate()
+    ) {
+      return true;
+    }
+
+    // Does the our date range's end date fall between the other date range's
+    // start and end dates?
+    //
+    // |----|   <-- Us
+    //   |----| <-- Them
+    if (
+      $this->getEndDate() >= $dateRange->getStartDate() &&
+      $this->getEndDate() <= $dateRange->getEndDate()
+    ) {
+      return true;
+    }
+
+    // Does the our date range span across the entirety of the other date
+    // range? Note that the reverse should be caught by one of the preceding
+    // checks, so we don't need to check here.
+    //
+    // |-------|  <-- Us
+    //   |---|    <-- Them
+    if (
+      $this->getStartDate() <= $dateRange->getStartDate() &&
+      $this->getEndDate()   >= $dateRange->getEndDate()
+    ) {
+      return true;
+    }
+
+    return false;
+
+  }
+
 }

@@ -138,4 +138,75 @@ class OmnipediaDateRangeTest extends UnitTestCase {
 
   }
 
+  /**
+   * Test that the date range overlap method correctly identifies such ranges.
+   */
+  public function testOverlapsWithRange(): void {
+
+    $ranges = [
+      //   |----|
+      // |----|
+      [['2049-10-01', '2049-10-10'], ['2049-09-28', '2049-10-05'], true],
+      // |----|
+      //   |----|
+      [['2049-09-28', '2049-10-05'], ['2049-10-01', '2049-10-10'], true],
+      // |-------|
+      //   |---|
+      [['2049-09-28', '2049-10-10'], ['2049-10-01', '2049-10-05'], true],
+      //   |---|
+      // |-------|
+      [['2049-10-01', '2049-10-05'], ['2049-09-28', '2049-10-10'], true],
+      // |---|
+      // |-------|
+      [['2049-09-28', '2049-10-05'], ['2049-09-28', '2049-10-10'], true],
+      //     |---|
+      // |-------|
+      [['2049-09-28', '2049-10-10'], ['2049-10-05', '2049-10-10'], true],
+      // |---|
+      //        |---|
+      [['2049-09-28', '2049-10-01'], ['2049-10-05', '2049-10-10'], false],
+      //        |---|
+      // |---|
+      [['2049-10-05', '2049-10-10'], ['2049-09-28', '2049-10-01'], false],
+    ];
+
+    foreach ($ranges as $values) {
+
+      /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
+      $dateRange1 = $this->createDateRange($values[0][0], $values[0][1]);
+
+      /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
+      $dateRange2 = $this->createDateRange($values[1][0], $values[1][1]);
+
+      $this->assertEquals(
+        $values[2], $dateRange1->overlapsWithRange($dateRange2)
+      );
+
+    }
+
+  }
+
+  /**
+   * Test that the date overlap method correctly identifies such dates.
+   */
+  public function testOverlapsDate(): void {
+
+    /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
+    $dateRange = $this->createDateRange('2049-09-28', '2049-10-05');
+
+    foreach ([
+      '2049-09-27' => false,
+      '2049-09-28' => true,
+      '2049-09-30' => true,
+      '2049-10-03' => true,
+      '2049-10-07' => false,
+      '2049-10-10' => false,
+    ] as $date => $expected) {
+      $this->assertEquals(
+        $expected, $dateRange->overlapsDate($this->createDate($date))
+      );
+    }
+
+  }
+
 }

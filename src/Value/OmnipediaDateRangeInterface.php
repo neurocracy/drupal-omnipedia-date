@@ -33,4 +33,29 @@ interface OmnipediaDateRangeInterface {
    */
   public function getEndDate(): DateTimePlus;
 
+  /**
+   * Determine if this date range overlaps a date.
+   *
+   * @param \Drupal\Component\Datetime\DateTimePlus $date
+   *   The date object to check against this date range instance.
+   *
+   * @return bool
+   *   True if the provided date falls within the start and end dates of this
+   *   date range, inclusive of the start and end dates; false it falls outside
+   *   of this date range.
+   */
+  public function overlapsDate(DateTimePlus $date): bool;
+
+  /**
+   * Determine if this date range overlaps with another date range.
+   *
+   * @param self $dateRange
+   *   The date range instance to check against the current instance.
+   *
+   * @return bool
+   *   True if at least one date of the provided date range occurs within the
+   *   this date range; false otherwise.
+   */
+  public function overlapsWithRange(self $dateRange): bool;
+
 }
