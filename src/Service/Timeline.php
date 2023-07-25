@@ -44,7 +44,10 @@ class Timeline implements TimelineInterface {
    *   The Omnipedia date collection service.
    *
    * @param \Drupal\omnipedia_date\Service\DefaultDateInterface $defaultDate
-   *   The Omnipedia default date servivce.
+   *   The Omnipedia default date service.
+   *
+   * @param \Drupal\omnipedia_date\Service\DefinedDatesInterface $definedDates
+   *   The Omnipedia defined dates service.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
