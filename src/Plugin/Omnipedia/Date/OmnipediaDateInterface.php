@@ -62,12 +62,10 @@ interface OmnipediaDateInterface {
    *     self::DATE_FORMAT_STORAGE.
    *
    *   - 'html': The date format used when outputting to HTML, usually in a
-   *     <time> element. This is defined by
-   *     self::DATE_FORMAT_HTML.
+   *     <time> element. This is defined by self::DATE_FORMAT_HTML.
    *
    *   - 'long': The long user-friendly date output format. This is defined by
-   *     \self::DATE_FORMAT_LONG. This is the
-   *     default.
+   *     self::DATE_FORMAT_LONG. This is the default.
    *
    *   - 'short': The short user-friendly date output format. This is defined by
    *     self::DATE_FORMAT_SHORT.
