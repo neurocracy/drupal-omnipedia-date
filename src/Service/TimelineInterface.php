@@ -201,14 +201,8 @@ interface TimelineInterface {
   /**
    * Find all dates defined by content.
    *
-   * Note that this method always rebuilds the lists of dates when invoked so it
-   * should only be used when necessary, i.e. content has been updated.
-   *
-   * Once the dates have been found and saved, they can be accessed via
-   * $this->getDefinedDates().
-   *
-   * @see $this->getDefinedDates()
-   *   Returns any defined dates.
+   * @see \Drupal\omnipedia_date\Service\DefinedDatesInterface::find()
+   *   Wrapper around this.
    */
   public function findDefinedDates(): void;
 
@@ -222,6 +216,9 @@ interface TimelineInterface {
    * @return array
    *   Zero or more unique dates that have content. Note that this will likely
    *   vary based on the $includeUnpublished parameter.
+   *
+   * @see \Drupal\omnipedia_date\Service\DefinedDatesInterface::get()
+   *   Wrapper around this.
    */
   public function getDefinedDates(bool $includeUnpublished = false): array;
 

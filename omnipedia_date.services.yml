@@ -13,6 +13,12 @@ services:
     arguments:
       - '@plugin.manager.omnipedia_date'
 
+  omnipedia_date.defined_dates:
+    class: Drupal\omnipedia_date\Service\DefinedDates
+    arguments:
+      - '@omnipedia.wiki_node_tracker'
+      - '@state'
+
   plugin.manager.omnipedia_date:
     class: Drupal\omnipedia_date\PluginManager\OmnipediaDateManager
     parent: default_plugin_manager
@@ -60,9 +66,9 @@ services:
     class: Drupal\omnipedia_date\Service\Timeline
     arguments:
       - '@omnipedia_date.date_collection'
+      - '@omnipedia_date.defined_dates'
       - '@omnipedia.wiki_node_main_page'
       - '@omnipedia.wiki_node_resolver'
-      - '@omnipedia.wiki_node_tracker'
       - '@session'
       - '@state'
       - '@string_translation'

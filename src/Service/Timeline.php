@@ -10,8 +10,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\omnipedia_core\Service\WikiNodeMainPageInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
-use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
+use Drupal\omnipedia_date\Service\DefinedDatesInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Drupal\omnipedia_date\Value\OmnipediaDateRange;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -36,17 +36,6 @@ class Timeline implements TimelineInterface {
   protected const DEFAULT_DATE_STATE_KEY = 'omnipedia.default_date';
 
   /**
-   * The Drupal state key where we store the list of dates defined by content.
-   *
-   * @see $this->findDefinedDates()
-   *   Uses this constant to save dates to state storage.
-   *
-   * @see $this->getDefinedDates()
-   *   Uses this constant to read dates from state storage.
-   */
-  protected const DEFINED_DATES_STATE_KEY = 'omnipedia.defined_dates';
-
-  /**
    * The current date as a string.
    *
    * @var string
@@ -61,26 +50,6 @@ class Timeline implements TimelineInterface {
   protected string $defaultDate = '';
 
   /**
-   * Dates defined by content.
-   *
-   * Two versions are stored, under the top level keys 'all' (published and
-   * unpublished content) and 'published' (only published content). Each top
-   * level key is an array of date strings in the 'storage' format.
-   *
-   * @var array
-   *
-   * @see $this->findDefinedDates()
-   *   Scans content to build arrays of dates.
-   *
-   * @see $this->getDefinedDates()
-   *   Use this to get these dates.
-   *
-   * @see self::DEFINED_DATES_STATE_KEY
-   *   Drupal state key where dates are stored persistently between requests.
-   */
-  protected array $definedDates;
-
-  /**
    * Service constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeMainPageInterface $wikiNodeMainPage
@@ -88,9 +57,6 @@ class Timeline implements TimelineInterface {
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
-   *
-   * @param \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface $wikiNodeTracker
-   *   The Omnipedia wiki node tracker service.
    *
    * @param \Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface $datePluginManager
    *   The Omnipedia Date plug-in manager.
@@ -106,9 +72,9 @@ class Timeline implements TimelineInterface {
    */
   public function __construct(
     protected readonly DateCollectionInterface    $dateCollection,
+    protected readonly DefinedDatesInterface      $definedDates,
     protected readonly WikiNodeMainPageInterface $wikiNodeMainPage,
     protected readonly WikiNodeResolverInterface $wikiNodeResolver,
-    protected readonly WikiNodeTrackerInterface  $wikiNodeTracker,
     protected readonly SessionInterface          $session,
     protected readonly StateInterface            $stateManager,
     protected $stringTranslation,
@@ -392,83 +358,18 @@ class Timeline implements TimelineInterface {
    * {@inheritdoc}
    */
   public function findDefinedDates(): void {
-    // This defines the keys used to store dates, while the values determine if
-    // the key should include unpublished wiki nodes.
-    /** @var array */
-    $dateTypes = [
-      'all'       => true,
-      'published' => false
-    ];
 
-    /** @var array */
-    $dates = [];
+    $this->definedDates->find();
 
-    /** @var array */
-    $nodeData = $this->wikiNodeTracker->getTrackedWikiNodeData();
-
-    foreach ($dateTypes as $dateType => $includeUnpublished) {
-      // Make sure each date type has an array, to avoid errors if no results
-      // are found.
-      $dates[$dateType] = [];
-
-      foreach ($nodeData['dates'] as $date => $nodesForDate) {
-        // If we're including unpublished nodes, add the date unconditionally.
-        if ($includeUnpublished === true) {
-          $dates[$dateType][] = $date;
-
-        // If we're not including unpublished nodes, we have to check that at
-        // least one published node has this date before adding it.
-        } else {
-          foreach ($nodesForDate as $nid) {
-            if ($nodeData['nodes'][$nid]['published'] === true) {
-              $dates[$dateType][] = $date;
-
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    // Save to state storage for retrieval in a future response.
-    $this->stateManager->set(
-      self::DEFINED_DATES_STATE_KEY,
-      $dates
-    );
-
-    // Save to our property for quick retrieval within this request.
-    $this->definedDates = $dates;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getDefinedDates(bool $includeUnpublished = false): array {
-    /** @var string */
-    $dateTypeKey = $includeUnpublished ? 'all' : 'published';
 
-    // If we've already saved the defined dates to the property, return that.
-    if (isset($this->definedDates[$dateTypeKey])) {
-      return $this->definedDates[$dateTypeKey];
-    }
+    return $this->definedDates->get($includeUnpublished);
 
-    // Attempt to load defined dates from state storage.
-    /** @var array|null */
-    $stateData = $this->stateManager->get(self::DEFINED_DATES_STATE_KEY);
-
-    // If state storage returned an array instead of null, save it to the
-    // property and return the appropriate data.
-    if (is_array($stateData)) {
-      $this->definedDates = $stateData;
-
-      return $this->definedDates[$dateTypeKey];
-    }
-
-    // If neither the property nor the state data are set, scan content to find
-    // and save the defined dates.
-    $this->findDefinedDates();
-
-    return $this->definedDates[$dateTypeKey];
   }
 
 }
