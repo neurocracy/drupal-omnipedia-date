@@ -132,14 +132,14 @@ interface TimelineInterface {
   /**
    * Determine if a given date is between/within a given range.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $date
+   * @param string $date
    *   The date or date keyword to test.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $startDate
+   * @param string $startDate
    *   The start date or date keyword to use as the earliest date that $date can
    *   be.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $endDate
+   * @param string $endDate
    *   The end date or date keyword to use as the latest date that $date can be.
    *
    * @param bool $includeUnpublished
@@ -155,9 +155,9 @@ interface TimelineInterface {
    *   date objects for the comparison.
    */
   public function isDateBetween(
-    string|DrupalDateTime $date,
-    string|DrupalDateTime $startDate,
-    string|DrupalDateTime $endDate,
+    string $date,
+    string $startDate,
+    string $endDate,
     bool $includeUnpublished = false
   ): bool;
 
@@ -170,16 +170,16 @@ interface TimelineInterface {
    * be considered as overlapping; in that case, the start date should be moved
    * to next date to not be considered as overlapping.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $startDate1
+   * @param string $startDate1
    *   The date or date keyword to use as the start of the first date range.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $endDate1
+   * @param string $endDate1
    *   The date or date keyword to use as the end of the first date range.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $startDate2
+   * @param string $startDate2
    *   The date or date keyword to use as the start of the second date range.
    *
-   * @param string|\Drupal\Core\Datetime\DrupalDateTime $endDate2
+   * @param string $endDate2
    *   The date or date keyword to use as the end of the second date range.
    *
    * @param bool $includeUnpublished
@@ -191,10 +191,10 @@ interface TimelineInterface {
    *   don't overlap.
    */
   public function doDateRangesOverlap(
-    string|DrupalDateTime $startDate1,
-    string|DrupalDateTime $endDate1,
-    string|DrupalDateTime $startDate2,
-    string|DrupalDateTime $endDate2,
+    string $startDate1,
+    string $endDate1,
+    string $startDate2,
+    string $endDate2,
     bool $includeUnpublished = false
   ): bool;
 

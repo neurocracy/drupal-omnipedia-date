@@ -324,98 +324,68 @@ class Timeline implements TimelineInterface {
    * {@inheritdoc}
    */
   public function isDateBetween(
-    string|DrupalDateTime $date,
-    string|DrupalDateTime $startDate,
-    string|DrupalDateTime $endDate,
+    string $date,
+    string $startDate,
+    string $endDate,
     bool $includeUnpublished = false
   ): bool {
+
     if (empty($date)) {
       return true;
     }
 
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
     $dateObject = $this->getDateObject($date, $includeUnpublished);
 
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
     $startDateObject = $this->getDateObject($startDate, $includeUnpublished);
 
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
     $endDateObject = $this->getDateObject($endDate, $includeUnpublished);
 
-    // As of PHP 5.2.2, DateTime objects can be compared using comparison
-    // operators:
-    //
-    // @see https://www.php.net/manual/en/datetime.diff.php
-    return $startDateObject <= $dateObject && $dateObject <= $endDateObject;
+    return (new OmnipediaDateRange(
+      $startDateObject, $endDateObject,
+    ))->overlapsDate($dateObject);
+
   }
 
   /**
    * {@inheritdoc}
    */
   public function doDateRangesOverlap(
-    string|DrupalDateTime $startDate1,
-    string|DrupalDateTime $endDate1,
-    string|DrupalDateTime $startDate2,
-    string|DrupalDateTime $endDate2,
+    string $startDate1,
+    string $endDate1,
+    string $startDate2,
+    string $endDate2,
     bool $includeUnpublished = false
   ): bool {
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
+
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
     $startDate1Object = $this->getDateObject(
       $startDate1, $includeUnpublished
     );
 
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
     $endDate1Object = $this->getDateObject(
       $endDate1, $includeUnpublished
     );
 
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
     $startDate2Object = $this->getDateObject(
       $startDate2, $includeUnpublished
     );
 
-    /** @var \Drupal\Core\Datetime\DrupalDateTime */
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
     $endDate2Object = $this->getDateObject(
       $endDate2, $includeUnpublished
     );
 
-    // Does the first date range's start date fall between the second date
-    // range's start and end dates?
-    //
-    //   |----| <-- Date range 1
-    // |----|   <-- Date range 2
-    if (
-      $startDate1Object >= $startDate2Object &&
-      $startDate1Object <= $endDate2Object
-    ) {
-      return true;
-    }
+    return (new OmnipediaDateRange(
+      $startDate1Object, $endDate1Object,
+    ))->overlapsWithRange(new OmnipediaDateRange(
+      $startDate2Object, $endDate2Object,
+    ));
 
-    // Does the first date range's end date fall between the second date range's
-    // start and end dates?
-    //
-    // |----|   <-- Date range 1
-    //   |----| <-- Date range 2
-    if (
-      $endDate1Object >= $startDate2Object &&
-      $endDate1Object <= $endDate2Object
-    ) {
-      return true;
-    }
-
-    // Does the first date range span across the entirety of the second date
-    // range?
-    //
-    // |-------|  <-- Date range 1
-    //   |---|    <-- Date range 2
-    if (
-      $startDate1Object <= $startDate2Object &&
-      $endDate1Object   >= $endDate2Object
-    ) {
-      return true;
-    }
-
-    return false;
   }
 
   /**
