@@ -8,7 +8,6 @@ use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\omnipedia_core\Service\WikiNodeMainPageInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
@@ -23,38 +22,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class Timeline implements TimelineInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * The date format stored in the database.
-   *
-   * @see \Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface::DATE_STORAGE_FORMAT
-   *   An alias for this Drupal core constant.
-   */
-  public const DATE_FORMAT_STORAGE = DateTimeItemInterface::DATE_STORAGE_FORMAT;
-
-  /**
-   * The date format for output to HTML, usually a <time> element.
-   *
-   * @see \Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface::DATE_STORAGE_FORMAT
-   *   Currently an alias for this Drupal core constant.
-   */
-  public const DATE_FORMAT_HTML = DateTimeItemInterface::DATE_STORAGE_FORMAT;
-
-  /**
-   * The long user-friendly date output format.
-   *
-   * @see https://www.php.net/manual/en/function.date
-   *   Format reference.
-   */
-  public const DATE_FORMAT_LONG = 'F jS Y';
-
-  /**
-   * The short user-friendly date output format.
-   *
-   * @see https://www.php.net/manual/en/function.date
-   *   Format reference.
-   */
-  public const DATE_FORMAT_SHORT = 'Y/m/d';
 
   /**
    * The Symfony session attribute key where we store the current date.
