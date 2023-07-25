@@ -52,14 +52,14 @@ class Timeline implements TimelineInterface {
   /**
    * Service constructor; saves dependencies.
    *
+   * @param \Drupal\omnipedia_date\Service\DateCollectionInterface $dateCollection
+   *   The Omnipedia date collection service.
+   *
    * @param \Drupal\omnipedia_core\Service\WikiNodeMainPageInterface $wikiNodeMainPage
    *   The Omnipedia wiki node main page service.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
-   *
-   * @param \Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface $datePluginManager
-   *   The Omnipedia Date plug-in manager.
    *
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
    *   The Symfony session service.
@@ -75,8 +75,10 @@ class Timeline implements TimelineInterface {
     protected readonly DefinedDatesInterface      $definedDates,
     protected readonly WikiNodeMainPageInterface $wikiNodeMainPage,
     protected readonly WikiNodeResolverInterface $wikiNodeResolver,
-    protected readonly SessionInterface          $session,
-    protected readonly StateInterface            $stateManager,
+    protected readonly WikiNodeMainPageInterface  $wikiNodeMainPage,
+    protected readonly WikiNodeResolverInterface  $wikiNodeResolver,
+    protected readonly SessionInterface           $session,
+    protected readonly StateInterface             $stateManager,
     protected $stringTranslation,
   ) {}
 
