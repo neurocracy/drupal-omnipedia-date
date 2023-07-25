@@ -44,10 +44,22 @@ class OmnipediaDateRangeTest extends UnitTestCase {
   ): OmnipediaDateRangeInterface {
 
     return new OmnipediaDateRange(
-      DateTimePlus::createFromFormat(self::DATE_FORMAT, $start, null),
-      DateTimePlus::createFromFormat(self::DATE_FORMAT, $end, null),
+      $this->createDate($start),
+      $this->createDate($end),
     );
 
+  }
+
+  /**
+   * Create a DateTimePlus instance with the provided date.
+   *
+   * @param string $date
+   *   A date in storage format.
+   *
+   * @return \Drupal\Component\Datetime\DateTimePlus
+   */
+  protected function createDate(string $date): DateTimePlus {
+    return DateTimePlus::createFromFormat(self::DATE_FORMAT, $date, null);
   }
 
   /**
