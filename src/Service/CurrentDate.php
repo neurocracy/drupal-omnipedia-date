@@ -16,7 +16,7 @@ class CurrentDate implements CurrentDateInterface {
   /**
    * The Symfony session attribute key where we store the current date.
    *
-   * @see https://symfony.com/doc/3.4/components/http_foundation/sessions.html#namespaced-attributes
+   * @see https://symfony.com/doc/current/session.html
    */
   protected const CURRENT_DATE_SESSION_KEY = 'omnipedia/currentDate';
 
