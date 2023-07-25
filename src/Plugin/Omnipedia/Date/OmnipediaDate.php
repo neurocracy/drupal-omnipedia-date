@@ -67,7 +67,8 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
     /** @var \Drupal\Component\Datetime\DateTimePlus */
     $dateObject = DateTimePlus::createFromFormat(
       self::DATE_FORMAT_STORAGE,
-      $date
+      $date,
+      null,
     );
 
     if ($dateObject->hasErrors()) {
