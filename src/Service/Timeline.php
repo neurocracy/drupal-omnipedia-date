@@ -85,8 +85,6 @@ class Timeline implements TimelineInterface {
 
       } else if ($date === 'default') {
 
-        $this->findDefaultDate();
-
         return $this->dateCollection->get(
           $this->defaultDate->get()
         )->getDateObject();
