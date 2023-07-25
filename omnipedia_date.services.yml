@@ -13,6 +13,13 @@ services:
     arguments:
       - '@plugin.manager.omnipedia_date'
 
+  omnipedia_date.current_date:
+    class: Drupal\omnipedia_date\Service\CurrentDate
+    arguments:
+      - '@omnipedia_date.date_collection'
+      - '@omnipedia_date.default_date'
+      - '@session'
+
   omnipedia_date.default_date:
     class: Drupal\omnipedia_date\Service\DefaultDate
     arguments:
@@ -73,10 +80,9 @@ services:
   omnipedia.timeline:
     class: Drupal\omnipedia_date\Service\Timeline
     arguments:
+      - '@omnipedia_date.current_date'
       - '@omnipedia_date.date_collection'
       - '@omnipedia_date.default_date'
       - '@omnipedia_date.defined_dates'
       - '@omnipedia.wiki_node_resolver'
-      - '@session'
-      - '@state'
       - '@string_translation'

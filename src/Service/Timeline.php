@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_date\Service;
 
 use Drupal\Component\Datetime\DateTimePlus;
-use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
+use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
 use Drupal\omnipedia_date\Service\DefinedDatesInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Drupal\omnipedia_date\Value\OmnipediaDateRange;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * The Omnipedia timeline service.
@@ -24,21 +23,10 @@ class Timeline implements TimelineInterface {
   use StringTranslationTrait;
 
   /**
-   * The Symfony session attribute key where we store the current date.
-   *
-   * @see https://symfony.com/doc/3.4/components/http_foundation/sessions.html#namespaced-attributes
-   */
-  protected const CURRENT_DATE_SESSION_KEY = 'omnipedia/currentDate';
-
-  /**
-   * The current date as a string.
-   *
-   * @var string
-   */
-  protected string $currentDate = '';
-
-  /**
    * Service constructor; saves dependencies.
+   *
+   * @param \ Drupal\omnipedia_date\Service\CurrentDateInterface $currentDate
+   *   The Omnipedia current date service.
    *
    * @param \Drupal\omnipedia_date\Service\DateCollectionInterface $dateCollection
    *   The Omnipedia date collection service.
@@ -52,67 +40,24 @@ class Timeline implements TimelineInterface {
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
    *
-   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-   *   The Symfony session service.
-   *
-   * @param \Drupal\Core\State\StateInterface $stateManager
-   *   The Drupal state system manager.
-   *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The Drupal string translation service.
    */
   public function __construct(
+    protected readonly CurrentDateInterface       $currentDate,
     protected readonly DateCollectionInterface    $dateCollection,
     protected readonly DefaultDateInterface       $defaultDate,
     protected readonly DefinedDatesInterface      $definedDates,
     protected readonly WikiNodeResolverInterface  $wikiNodeResolver,
-    protected readonly SessionInterface           $session,
-    protected readonly StateInterface             $stateManager,
     protected $stringTranslation,
   ) {}
-
-  /**
-   * Find and set the current date if it hasn't yet been set.
-   *
-   * @see $this->setCurrentDate()
-   *   Validates and sets the current date.
-   */
-  protected function findCurrentDate(): void {
-    // Don't do this twice.
-    if (!empty($this->currentDate)) {
-      return;
-    }
-
-    // Retrieve the current date from session storage, if available, falling
-    // back to the default date if not found. Note that we have to check if
-    // headers have already been sent to avoid Symfony throwing an error.
-    if (!\headers_sent() && $this->session->has(self::CURRENT_DATE_SESSION_KEY)) {
-      $date = $this->session->get(self::CURRENT_DATE_SESSION_KEY);
-
-    } else {
-
-      $date = $this->defaultDate->get();
-
-    }
-
-    $this->setCurrentDate($date);
-  }
 
   /**
    * {@inheritdoc}
    */
   public function setCurrentDate(string $date): void {
 
-    $this->currentDate = $this->dateCollection->get($date)->format('storage');
-
-    // Save to session storage if headers haven't been sent yet - checking this
-    // is necessary to avoid Symfony throwing an error.
-    if (!\headers_sent()) {
-      $this->session->set(
-        self::CURRENT_DATE_SESSION_KEY,
-        $this->currentDate
-      );
-    }
+    $this->currentDate->set($date);
 
   }
 
@@ -134,10 +79,8 @@ class Timeline implements TimelineInterface {
     if (\is_string($date)) {
       if ($date === 'current') {
 
-        $this->findCurrentDate();
-
         return $this->dateCollection->get(
-          $this->currentDate
+          $this->currentDate->get()
         )->getDateObject();
 
       } else if ($date === 'default') {
@@ -192,9 +135,7 @@ class Timeline implements TimelineInterface {
 
     } else if ($date === 'current') {
 
-      $this->findCurrentDate();
-
-      $date = $this->currentDate;
+      $date = $this->currentDate->get();
 
     } else if ($date === 'default') {
 
