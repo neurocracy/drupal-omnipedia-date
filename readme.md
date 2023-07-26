@@ -103,3 +103,5 @@ The following major version bumps indicate breaking changes:
   * Removed the `Timeline` class date constants; these have been moved to `\Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface`.
 
   * `Timeline::getDateObject()` is now a protected method; this wasn't used in other modules, and all uses of it in this module have been replaced with other, more specific services.
+
+  * `Service\TimelineInterface::findDefinedDates()` has been removed; use `Service\DefinedDatesInterface::find()` instead.

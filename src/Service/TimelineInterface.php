@@ -139,14 +139,6 @@ interface TimelineInterface {
   ): bool;
 
   /**
-   * Find all dates defined by content.
-   *
-   * @see \Drupal\omnipedia_date\Service\DefinedDatesInterface::find()
-   *   Wrapper around this.
-   */
-  public function findDefinedDates(): void;
-
-  /**
    * Get a list of dates that have content.
    *
    * @param bool $includeUnpublished

@@ -6,7 +6,7 @@ namespace Drupal\omnipedia_date\EventSubscriber\Entity;
 
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
-use Drupal\omnipedia_date\Service\TimelineInterface;
+use Drupal\omnipedia_date\Service\DefinedDatesInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\core_event_dispatcher\EntityHookEvents;
 use Drupal\core_event_dispatcher\Event\Entity\AbstractEntityEvent;
@@ -22,8 +22,8 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
   /**
    * Event subscriber constructor; saves dependencies.
    *
-   * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
-   *   The Omnipedia timeline service.
+   * @param \Drupal\omnipedia_date\Service\DefinedDatesInterface $definedDates
+   *   The Omnipedia defined dates service.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
@@ -32,9 +32,9 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
    *   The Omnipedia wiki node tracker service.
    */
   public function __construct(
-    protected readonly TimelineInterface         $timeline,
-    protected readonly WikiNodeResolverInterface $wikiNodeResolver,
-    protected readonly WikiNodeTrackerInterface  $wikiNodeTracker,
+    protected readonly DefinedDatesInterface      $definedDates,
+    protected readonly WikiNodeResolverInterface  $wikiNodeResolver,
+    protected readonly WikiNodeTrackerInterface   $wikiNodeTracker,
   ) {}
 
   /**
@@ -63,7 +63,7 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
    * @see \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface::untrackWikiNode()
    *   Calls this method to stop tracking a wiki node.
    *
-   * @see \Drupal\omnipedia_date\Service\TimelineInterface::findDefinedDates()
+   * @see \Drupal\omnipedia_date\Service\DefinedDatesInterface::find()
    *   Calls this method to invoke a rescan of wiki nodes.
    */
   public function updateDefinedDates(AbstractEntityEvent $event) {
@@ -88,7 +88,7 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
     }
 
     // Rescan content to build list of defined dates.
-    $this->timeline->findDefinedDates();
+    $this->definedDates->find();
 
   }
 

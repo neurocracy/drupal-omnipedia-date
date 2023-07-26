@@ -204,15 +204,6 @@ class Timeline implements TimelineInterface {
   /**
    * {@inheritdoc}
    */
-  public function findDefinedDates(): void {
-
-    $this->definedDates->find();
-
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getDefinedDates(bool $includeUnpublished = false): array {
 
     return $this->definedDates->get($includeUnpublished);

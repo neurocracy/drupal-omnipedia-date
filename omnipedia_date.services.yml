@@ -52,7 +52,7 @@ services:
   omnipedia_date.entity_update_defined_dates_event_subscriber:
     class: Drupal\omnipedia_date\EventSubscriber\Entity\UpdateDefinedDatesEventSubscriber
     arguments:
-      - '@omnipedia.timeline'
+      - '@omnipedia_date.defined_dates'
       - '@omnipedia.wiki_node_resolver'
       - '@omnipedia.wiki_node_tracker'
     tags:
