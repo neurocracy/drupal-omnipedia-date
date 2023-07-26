@@ -57,12 +57,10 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
    *
    * @param string $date
    *
-   * @return \Drupal\Component\Datetime\DateTimePlus
-   *
    * @throws \InvalidArgumentException
    *   If the DateTimePlus object reports any errors.
    */
-  protected function initializeDateObject(string $date): DateTimePlus {
+  protected function initializeDateObject(string $date): void {
 
     /** @var \Drupal\Component\Datetime\DateTimePlus */
     $dateObject = DateTimePlus::createFromFormat(
@@ -79,8 +77,6 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
     }
 
     $this->dateObject = $dateObject;
-
-    return $this->dateObject;
 
   }
 
@@ -103,6 +99,7 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
   public function format(string $format): string {
 
     switch ($format) {
+
       case 'storage':
 
         $formatString = self::DATE_FORMAT_STORAGE;
