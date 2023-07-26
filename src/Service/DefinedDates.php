@@ -149,7 +149,7 @@ class DefinedDates implements DefinedDatesInterface {
 
     // If neither the property nor the state data are set, scan content to find
     // and save the defined dates.
-    $this->findDefinedDates();
+    $this->find();
 
     return $this->definedDates[$dateTypeKey];
 
