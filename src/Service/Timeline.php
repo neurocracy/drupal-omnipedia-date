@@ -71,31 +71,37 @@ class Timeline implements TimelineInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Convenience method to get a date object or resolve a string date/keyword.
+   *
+   * @param string|\Drupal\Component\Datetime\DateTimePlus $dateOrKeyword
+   *   Must be one of:
+   *
+   *   - A string date or keyword that can be resolved by
+   *     \Drupal\omnipedia_date\Service\DateResolverInterface::resolve().
+   *
+   *   - An instance of \Drupal\Component\Datetime\DateTimePlus.
+   *
+   * @param bool $includeUnpublished
+   *   Whether to include dates that have only unpublished content.
+   *
+   * @return \Drupal\Component\Datetime\DateTimePlus
+   *   A date object representing $date. If $date was provided as a date object,
+   *   it will be returned as-is.
+   *
+   * @see \Drupal\omnipedia_date\Service\DateResolverInterface::resolve()
    */
-  public function getDateObject(
-    string|DateTimePlus $date = 'current', bool $includeUnpublished = false
+  protected function getDateObject(
+    string|DateTimePlus $dateOrKeyword, bool $includeUnpublished = false
   ): DateTimePlus {
 
-    if (\is_string($date)) {
-
-      return $this->dateResolver->resolve(
-        $date, $includeUnpublished
-      )->getDateObject();
-
-    } else if ($date instanceof DateTimePlus) {
-      if ($date->hasErrors()) {
-        throw new \InvalidArgumentException(
-          'There are one or more errors with the provided \Drupal\Component\Datetime\DateTimePlus object:' .
-          "\n" . \implode("\n", $date->getErrors())
-        );
-      }
-
-      return $date;
-
-    } else {
-      throw new \InvalidArgumentException('The $date parameter must either be a string or an instance of \Drupal\Component\Datetime\DateTimePlus.');
+    if ($dateOrKeyword instanceof DateTimePlus) {
+      return $dateOrKeyword;
     }
+
+    return $this->dateResolver->resolve(
+      $dateOrKeyword, $includeUnpublished
+    )->getDateObject();
+
   }
 
   /**

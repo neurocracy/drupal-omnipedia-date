@@ -101,3 +101,5 @@ The following major version bumps indicate breaking changes:
   * This heavily refactors the underlying functionality of the Timeline service into smaller services, plug-ins, and other classes. Most of these don't change backwards compatibility, but a number of parameters and return values have changed slightly.
 
   * Removed the `Timeline` class date constants; these have been moved to `\Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface`.
+
+  * `Timeline::getDateObject()` is now a protected method; this wasn't used in other modules, and all uses of it in this module have been replaced with other, more specific services.

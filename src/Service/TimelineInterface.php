@@ -29,47 +29,6 @@ interface TimelineInterface {
   public function setDefaultDate(string $date): void;
 
   /**
-   * Get a date object for a date.
-   *
-   * @param string|\Drupal\Component\Datetime\DateTimePlus $date
-   *   Must be one of:
-   *
-   *   - 'current': Indicates the current date is to be used. This is the
-   *     default.
-   *
-   *   - 'default': Indicates the default date is to be used.
-   *
-   *   - 'first': Indicates that the first defined date is to be used.
-   *
-   *   - 'last': Indicates that the last defined date is to be used.
-   *
-   *   - A string that can be parsed by \Drupal\Component\Datetime\DateTimePlus
-   *     without errors.
-   *
-   *   - An instance of \Drupal\Component\Datetime\DateTimePlus. This reduces
-   *     redundant checks for whether you have a string or a DateTimePlus
-   *     object, as passing either into this method with normalize to a
-   *     DateTimePlus object.
-   *
-   * @param bool $includeUnpublished
-   *   Whether to include dates that have only unpublished content. This is used
-   *   if $date is 'first' or 'last'. Defaults to false.
-   *
-   * @return \Drupal\Component\Datetime\DateTimePlus
-   *   A date object representing $date. If $date was provided as a date object,
-   *   it will be returned as-is.
-   *
-   * @throws \InvalidArgumentException
-   *   Exception thrown when the there is an error in constructing a date object
-   *   from $date, when the $date parameter is a date object but has errors, or
-   *   when the $date parameter is neither a string nor an instance of the date
-   *   object class.
-   */
-  public function getDateObject(
-    string|DateTimePlus $date = 'current', bool $includeUnpublished = false
-  ): DateTimePlus;
-
-  /**
    * Get a formatted date.
    *
    * @param string|\Drupal\Component\Datetime\DateTimePlus $date
