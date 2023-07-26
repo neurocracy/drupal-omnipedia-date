@@ -152,4 +152,26 @@ class DefinedDates implements DefinedDatesInterface {
 
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getFirstDate(bool $includeUnpublished = false): string {
+
+    $dates = $this->get($includeUnpublished);
+
+    return $dates[0];
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLastDate(bool $includeUnpublished = false): string {
+
+    $dates = $this->get($includeUnpublished);
+
+    return \end($dates);
+
+  }
+
 }

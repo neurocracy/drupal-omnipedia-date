@@ -36,4 +36,30 @@ interface DefinedDatesInterface {
    */
   public function get(bool $includeUnpublished = false): array;
 
+  /**
+   * Get the first date defined by content.
+   *
+   * @param bool $includeUnpublished
+   *   Whether to include dates that have only unpublished content. Defaults to
+   *   false.
+   *
+   * @return string
+   *   The first defined date, in the storage format. May vary based on the
+   *   $includeUnpublished parameter.
+   */
+  public function getFirstDate(bool $includeUnpublished = false): string;
+
+  /**
+   * Get the last date defined by content.
+   *
+   * @param bool $includeUnpublished
+   *   Whether to include dates that have only unpublished content. Defaults to
+   *   false.
+   *
+   * @return string
+   *   The last defined date, in the storage format. May vary based on the
+   *   $includeUnpublished parameter.
+   */
+  public function getLastDate(bool $includeUnpublished = false): string;
+
 }
