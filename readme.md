@@ -100,13 +100,12 @@ The following major version bumps indicate breaking changes:
 
   * This heavily refactors the underlying functionality of the Timeline service into smaller services, plug-ins, and other classes. Most of these don't change backwards compatibility, but a number of parameters and return values have changed slightly.
 
-  * Removed the `Timeline` class date constants; these have been moved to `\Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface`.
+  * Removed the [`Timeline`](src/Service/Timeline.php) class date constants; these have been moved to [`Plugin\Omnipedia\Date\OmnipediaDateInterface`](src/Plugin/Omnipedia/Date/OmnipediaDateInterface.php).
 
   * `Timeline::getDateObject()` is now a protected method; this wasn't used in other modules, and all uses of it in this module have been replaced with other, more specific services.
 
-  * `Service\TimelineInterface::findDefinedDates()` has been removed; use `Service\DefinedDatesInterface::find()` instead.
+  * `Service\TimelineInterface::findDefinedDates()` has been removed; use [`Service\DefinedDatesInterface::find()`](src/Service/DefinedDatesInterface.php) instead.
 
-  * `Service\TimelineInterface::setCurrentDate()` has been removed; use `Service\CurrentDateInterface::set()` instead.
+  * `Service\TimelineInterface::setCurrentDate()` has been removed; use [`Service\CurrentDateInterface::set()`](src/Service/CurrentDateInterface.php) instead.
 
-  * `Service\TimelineInterface::setDefaultDate()` has been removed; use `Service\DefaultDateInterface::set()` instead.
-
+  * `Service\TimelineInterface::setDefaultDate()` has been removed; use [`Service\DefaultDateInterface::set()`](src/Service/DefaultDateInterface.php) instead.
