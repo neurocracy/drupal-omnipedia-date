@@ -13,14 +13,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 interface TimelineInterface {
 
   /**
-   * Validate and set the default date.
-   *
-   * @param string $date
-   *   A date string in the storage format.
-   */
-  public function setDefaultDate(string $date): void;
-
-  /**
    * Get a list of dates that have content.
    *
    * @param bool $includeUnpublished

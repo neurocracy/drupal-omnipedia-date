@@ -45,7 +45,7 @@ services:
     class: Drupal\omnipedia_date\EventSubscriber\Config\UpdateDefaultDateEventSubscriber
     arguments:
       - '@entity_type.manager'
-      - '@omnipedia.timeline'
+      - '@omnipedia_date.default_date'
     tags:
       - { name: 'event_subscriber', priority: 200 }
 
@@ -80,7 +80,6 @@ services:
     arguments:
       - '@omnipedia_date.date_collection'
       - '@omnipedia_date.date_resolver'
-      - '@omnipedia_date.default_date'
       - '@omnipedia_date.defined_dates'
       - '@string_translation'
 

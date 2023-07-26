@@ -107,3 +107,6 @@ The following major version bumps indicate breaking changes:
   * `Service\TimelineInterface::findDefinedDates()` has been removed; use `Service\DefinedDatesInterface::find()` instead.
 
   * `Service\TimelineInterface::setCurrentDate()` has been removed; use `Service\CurrentDateInterface::set()` instead.
+
+  * `Service\TimelineInterface::setDefaultDate()` has been removed; use `Service\DefaultDateInterface::set()` instead.
+

@@ -10,7 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeStorageInterface;
-use Drupal\omnipedia_date\Service\TimelineInterface;
+use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -31,12 +31,12 @@ class UpdateDefaultDateEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Drupal entity type manager.
    *
-   * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
-   *   The Omnipedia timeline service.
+   * @param \Drupal\omnipedia_date\Service\DefaultDateInterface $defaultDate
+   *   The Omnipedia default date service.
    */
   public function __construct(
-    EntityTypeManagerInterface  $entityTypeManager,
-    protected readonly TimelineInterface $timeline,
+    EntityTypeManagerInterface              $entityTypeManager,
+    protected readonly DefaultDateInterface $defaultDate,
   ) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
   }
@@ -102,7 +102,7 @@ class UpdateDefaultDateEventSubscriber implements EventSubscriberInterface {
     }
 
     // Update the default date with the new default main page's date.
-    $this->timeline->setDefaultDate($node->getWikiNodeDate());
+    $this->defaultDate->set($node->getWikiNodeDate());
 
   }
 

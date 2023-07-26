@@ -7,7 +7,6 @@ namespace Drupal\omnipedia_date\Service;
 use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
 use Drupal\omnipedia_date\Service\DateResolverInterface;
 use Drupal\omnipedia_date\Service\DefinedDatesInterface;
@@ -27,9 +26,6 @@ class Timeline implements TimelineInterface {
    * @param \Drupal\omnipedia_date\Service\DateCollectionInterface $dateCollection
    *   The Omnipedia date collection service.
    *
-   * @param \Drupal\omnipedia_date\Service\DefaultDateInterface $defaultDate
-   *   The Omnipedia default date service.
-   *
    * @param \Drupal\omnipedia_date\Service\DateResolverInterface $dateResolver
    *   The Omnipedia date resolver servivce.
    *
@@ -42,19 +38,9 @@ class Timeline implements TimelineInterface {
   public function __construct(
     protected readonly DateCollectionInterface  $dateCollection,
     protected readonly DateResolverInterface    $dateResolver,
-    protected readonly DefaultDateInterface     $defaultDate,
     protected readonly DefinedDatesInterface    $definedDates,
     protected $stringTranslation,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setDefaultDate(string $date): void {
-
-    $this->defaultDate->set($date);
-
-  }
 
   /**
    * {@inheritdoc}
