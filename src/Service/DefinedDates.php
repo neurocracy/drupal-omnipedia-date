@@ -22,7 +22,7 @@ class DefinedDates implements DefinedDatesInterface {
    * @see self::get()
    *   Uses this constant to read dates from state storage.
    */
-  protected const DEFINED_DATES_STATE_KEY = 'omnipedia.defined_dates';
+  protected const STATE_KEY = 'omnipedia.defined_dates';
 
   /**
    * Dates defined by content.
@@ -39,7 +39,7 @@ class DefinedDates implements DefinedDatesInterface {
    * @see self::get()
    *   Use this to get these dates.
    *
-   * @see self::DEFINED_DATES_STATE_KEY
+   * @see self::STATE_KEY
    *   Drupal state key where dates are stored persistently between requests.
    */
   protected array $definedDates;
@@ -110,10 +110,7 @@ class DefinedDates implements DefinedDatesInterface {
     }
 
     // Save to state storage for retrieval in a future response.
-    $this->stateManager->set(
-      self::DEFINED_DATES_STATE_KEY,
-      $dates
-    );
+    $this->stateManager->set(self::STATE_KEY, $dates);
 
     // Save to our property for quick retrieval within this request.
     $this->definedDates = $dates;
@@ -135,7 +132,7 @@ class DefinedDates implements DefinedDatesInterface {
 
     // Attempt to load defined dates from state storage.
     /** @var array|null */
-    $stateData = $this->stateManager->get(self::DEFINED_DATES_STATE_KEY);
+    $stateData = $this->stateManager->get(self::STATE_KEY);
 
     // If state storage returned an array instead of null, save it to the
     // property and return the appropriate data.

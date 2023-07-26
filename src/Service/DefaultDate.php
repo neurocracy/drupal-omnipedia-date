@@ -18,7 +18,7 @@ class DefaultDate implements DefaultDateInterface {
   /**
    * The Drupal state key where we store the default date.
    */
-  protected const DEFAULT_DATE_STATE_KEY = 'omnipedia.default_date';
+  protected const STATE_KEY = 'omnipedia.default_date';
 
   /**
    * The default date as a string.
@@ -67,7 +67,7 @@ class DefaultDate implements DefaultDateInterface {
     }
 
     /** @var string|null */
-    $stateString = $this->stateManager->get(self::DEFAULT_DATE_STATE_KEY);
+    $stateString = $this->stateManager->get(self::STATE_KEY);
 
     // If we got a string instead of null, assume it's a date string, set it,
     // and return.
@@ -110,10 +110,7 @@ class DefaultDate implements DefaultDateInterface {
     $this->defaultDate = $this->dateCollection->get($date)->format('storage');
 
     // Save to state storage.
-    $this->stateManager->set(
-      self::DEFAULT_DATE_STATE_KEY,
-      $this->defaultDate,
-    );
+    $this->stateManager->set(self::STATE_KEY, $this->defaultDate);
 
   }
 

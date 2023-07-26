@@ -18,7 +18,7 @@ class CurrentDate implements CurrentDateInterface {
    *
    * @see https://symfony.com/doc/current/session.html
    */
-  protected const CURRENT_DATE_SESSION_KEY = 'omnipedia/currentDate';
+  protected const SESSION_KEY = 'omnipedia/currentDate';
 
   /**
    * The current date as a string.
@@ -61,10 +61,8 @@ class CurrentDate implements CurrentDateInterface {
     // Retrieve the current date from session storage, if available, falling
     // back to the default date if not found. Note that we have to check if
     // headers have already been sent to avoid Symfony throwing an error.
-    if (!\headers_sent() && $this->session->has(
-      self::CURRENT_DATE_SESSION_KEY
-    )) {
-      $date = $this->session->get(self::CURRENT_DATE_SESSION_KEY);
+    if (!\headers_sent() && $this->session->has(self::SESSION_KEY)) {
+      $date = $this->session->get(self::SESSION_KEY);
 
     } else {
 
@@ -87,10 +85,7 @@ class CurrentDate implements CurrentDateInterface {
     // is necessary to avoid Symfony throwing an error.
     if (!\headers_sent()) {
 
-      $this->session->set(
-        self::CURRENT_DATE_SESSION_KEY,
-        $this->currentDate,
-      );
+      $this->session->set(self::SESSION_KEY, $this->currentDate);
 
     }
 
