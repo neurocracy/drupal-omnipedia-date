@@ -7,7 +7,6 @@ namespace Drupal\omnipedia_date\Service;
 use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
@@ -41,9 +40,6 @@ class Timeline implements TimelineInterface {
    * @param \Drupal\omnipedia_date\Service\DefinedDatesInterface $definedDates
    *   The Omnipedia defined dates service.
    *
-   * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
-   *   The Omnipedia wiki node resolver service.
-   *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The Drupal string translation service.
    */
@@ -53,7 +49,6 @@ class Timeline implements TimelineInterface {
     protected readonly DateResolverInterface      $dateResolver,
     protected readonly DefaultDateInterface       $defaultDate,
     protected readonly DefinedDatesInterface      $definedDates,
-    protected readonly WikiNodeResolverInterface  $wikiNodeResolver,
     protected $stringTranslation,
   ) {}
 
