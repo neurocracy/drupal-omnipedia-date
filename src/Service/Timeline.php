@@ -71,6 +71,15 @@ class Timeline implements TimelineInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getDefinedDates(bool $includeUnpublished = false): array {
+
+    return $this->definedDates->get($includeUnpublished);
+
+  }
+
+  /**
    * Convenience method to get a date object or resolve a string date/keyword.
    *
    * @param string|\Drupal\Component\Datetime\DateTimePlus $dateOrKeyword
@@ -198,15 +207,6 @@ class Timeline implements TimelineInterface {
     ))->overlapsWithRange(new OmnipediaDateRange(
       $startDate2Object, $endDate2Object,
     ));
-
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefinedDates(bool $includeUnpublished = false): array {
-
-    return $this->definedDates->get($includeUnpublished);
 
   }
 

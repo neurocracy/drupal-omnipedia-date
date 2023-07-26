@@ -29,6 +29,22 @@ interface TimelineInterface {
   public function setDefaultDate(string $date): void;
 
   /**
+   * Get a list of dates that have content.
+   *
+   * @param bool $includeUnpublished
+   *   Whether to include dates that have only unpublished content. Defaults to
+   *   false.
+   *
+   * @return array
+   *   Zero or more unique dates that have content. Note that this will likely
+   *   vary based on the $includeUnpublished parameter.
+   *
+   * @see \Drupal\omnipedia_date\Service\DefinedDatesInterface::get()
+   *   Wrapper around this.
+   */
+  public function getDefinedDates(bool $includeUnpublished = false): array;
+
+  /**
    * Get a formatted date.
    *
    * @param string|\Drupal\Component\Datetime\DateTimePlus $dateOrKeyword
@@ -137,21 +153,5 @@ interface TimelineInterface {
     string $endDate2,
     bool $includeUnpublished = false
   ): bool;
-
-  /**
-   * Get a list of dates that have content.
-   *
-   * @param bool $includeUnpublished
-   *   Whether to include dates that have only unpublished content. Defaults to
-   *   false.
-   *
-   * @return array
-   *   Zero or more unique dates that have content. Note that this will likely
-   *   vary based on the $includeUnpublished parameter.
-   *
-   * @see \Drupal\omnipedia_date\Service\DefinedDatesInterface::get()
-   *   Wrapper around this.
-   */
-  public function getDefinedDates(bool $includeUnpublished = false): array;
 
 }
