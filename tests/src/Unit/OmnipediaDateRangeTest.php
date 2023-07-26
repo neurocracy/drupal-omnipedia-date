@@ -76,9 +76,15 @@ class OmnipediaDateRangeTest extends UnitTestCase {
     /** @var \Drupal\Component\Datetime\DateTimePlus */
     $endDate = $dateRange->getEndDate();
 
-    $this->assertEquals(true, $startDate instanceof DateTimePlus);
+    $this->assertInstanceOf(
+      DateTimePlus::class,
+      $startDate,
+    );
 
-    $this->assertEquals(true, $endDate instanceof DateTimePlus);
+    $this->assertInstanceOf(
+      DateTimePlus::class,
+      $endDate,
+    );
 
   }
 
