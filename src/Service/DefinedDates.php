@@ -16,10 +16,10 @@ class DefinedDates implements DefinedDatesInterface {
   /**
    * The Drupal state key where we store the list of dates defined by content.
    *
-   * @see self::findDefinedDates()
+   * @see self::find()
    *   Uses this constant to save dates to state storage.
    *
-   * @see self::getDefinedDates()
+   * @see self::get()
    *   Uses this constant to read dates from state storage.
    */
   protected const DEFINED_DATES_STATE_KEY = 'omnipedia.defined_dates';
@@ -33,10 +33,10 @@ class DefinedDates implements DefinedDatesInterface {
    *
    * @var array
    *
-   * @see self::findDefinedDates()
+   * @see self::find()
    *   Scans content to build arrays of dates.
    *
-   * @see self::getDefinedDates()
+   * @see self::get()
    *   Use this to get these dates.
    *
    * @see self::DEFINED_DATES_STATE_KEY
