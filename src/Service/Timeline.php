@@ -44,11 +44,11 @@ class Timeline implements TimelineInterface {
    *   The Drupal string translation service.
    */
   public function __construct(
-    protected readonly CurrentDateInterface       $currentDate,
-    protected readonly DateCollectionInterface    $dateCollection,
-    protected readonly DateResolverInterface      $dateResolver,
-    protected readonly DefaultDateInterface       $defaultDate,
-    protected readonly DefinedDatesInterface      $definedDates,
+    protected readonly CurrentDateInterface     $currentDate,
+    protected readonly DateCollectionInterface  $dateCollection,
+    protected readonly DateResolverInterface    $dateResolver,
+    protected readonly DefaultDateInterface     $defaultDate,
+    protected readonly DefinedDatesInterface    $definedDates,
     protected $stringTranslation,
   ) {}
 
