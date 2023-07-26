@@ -11,6 +11,7 @@ use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
+use Drupal\omnipedia_date\Service\DateResolverInterface;
 use Drupal\omnipedia_date\Service\DefinedDatesInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
 use Drupal\omnipedia_date\Value\OmnipediaDateRange;
@@ -34,6 +35,9 @@ class Timeline implements TimelineInterface {
    * @param \Drupal\omnipedia_date\Service\DefaultDateInterface $defaultDate
    *   The Omnipedia default date service.
    *
+   * @param \Drupal\omnipedia_date\Service\DateResolverInterface $dateResolver
+   *   The Omnipedia date resolver servivce.
+   *
    * @param \Drupal\omnipedia_date\Service\DefinedDatesInterface $definedDates
    *   The Omnipedia defined dates service.
    *
@@ -46,6 +50,7 @@ class Timeline implements TimelineInterface {
   public function __construct(
     protected readonly CurrentDateInterface       $currentDate,
     protected readonly DateCollectionInterface    $dateCollection,
+    protected readonly DateResolverInterface      $dateResolver,
     protected readonly DefaultDateInterface       $defaultDate,
     protected readonly DefinedDatesInterface      $definedDates,
     protected readonly WikiNodeResolverInterface  $wikiNodeResolver,
@@ -76,32 +81,12 @@ class Timeline implements TimelineInterface {
   public function getDateObject(
     string|DateTimePlus $date = 'current', bool $includeUnpublished = false
   ): DateTimePlus {
+
     if (\is_string($date)) {
-      if ($date === 'current') {
 
-        return $this->dateCollection->get(
-          $this->currentDate->get()
-        )->getDateObject();
-
-      } else if ($date === 'default') {
-
-        return $this->dateCollection->get(
-          $this->defaultDate->get()
-        )->getDateObject();
-
-      } else if ($date === 'first' || $date === 'last') {
-        /** @var array */
-        $definedDates = $this->getDefinedDates($includeUnpublished);
-
-        if ($date === 'first') {
-          $date = $definedDates[0];
-
-        } else if ($date === 'last') {
-          $date = \end($definedDates);
-        }
-      }
-
-      return $this->dateCollection->get($date)->getDateObject();
+      return $this->dateResolver->resolve(
+        $date, $includeUnpublished
+      )->getDateObject();
 
     } else if ($date instanceof DateTimePlus) {
       if ($date->hasErrors()) {

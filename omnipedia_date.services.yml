@@ -90,6 +90,7 @@ services:
     arguments:
       - '@omnipedia_date.current_date'
       - '@omnipedia_date.date_collection'
+      - '@omnipedia_date.date_resolver'
       - '@omnipedia_date.default_date'
       - '@omnipedia_date.defined_dates'
       - '@omnipedia.wiki_node_resolver'
