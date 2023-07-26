@@ -104,8 +104,8 @@ The following major version bumps indicate breaking changes:
 
   * `Timeline::getDateObject()` is now a protected method; this wasn't used in other modules, and all uses of it in this module have been replaced with other, more specific services.
 
-  * `Service\TimelineInterface::findDefinedDates()` has been removed; use [`Service\DefinedDatesInterface::find()`](src/Service/DefinedDatesInterface.php) instead.
-
   * `Service\TimelineInterface::setCurrentDate()` has been removed; use [`Service\CurrentDateInterface::set()`](src/Service/CurrentDateInterface.php) instead.
+
+  * `Service\TimelineInterface::findDefinedDates()` has been removed; use [`Service\DefinedDatesInterface::find()`](src/Service/DefinedDatesInterface.php) instead.
 
   * `Service\TimelineInterface::setDefaultDate()` has been removed; use [`Service\DefaultDateInterface::set()`](src/Service/DefaultDateInterface.php) instead.
