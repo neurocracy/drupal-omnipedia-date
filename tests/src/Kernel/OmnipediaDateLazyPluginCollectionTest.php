@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\omnipedia_date\Functional;
+namespace Drupal\Tests\omnipedia_date\Kernel;
 
 use Drupal\Core\State\StateInterface;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\omnipedia_date\PluginCollection\OmnipediaDateLazyPluginCollection;
 use Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * Tests for the Omnipedia date lazy plug-in collection.
@@ -20,7 +20,7 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @see \Drupal\Tests\Core\Plugin\LazyPluginCollectionTestBase
  */
-class OmnipediaDateLazyPluginCollectionTest extends BrowserTestBase {
+class OmnipediaDateLazyPluginCollectionTest extends KernelTestBase {
 
   /**
    * The Drupal state key where we store the list of dates defined by content.
@@ -51,12 +51,7 @@ class OmnipediaDateLazyPluginCollectionTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = ['omnipedia_date'];
+  protected static $modules = ['omnipedia_core', 'omnipedia_date'];
 
   /**
    * The lazy date plug-in configuration.
