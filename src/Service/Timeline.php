@@ -7,7 +7,6 @@ namespace Drupal\omnipedia_date\Service;
 use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
 use Drupal\omnipedia_date\Service\DateResolverInterface;
@@ -25,9 +24,6 @@ class Timeline implements TimelineInterface {
   /**
    * Service constructor; saves dependencies.
    *
-   * @param \ Drupal\omnipedia_date\Service\CurrentDateInterface $currentDate
-   *   The Omnipedia current date service.
-   *
    * @param \Drupal\omnipedia_date\Service\DateCollectionInterface $dateCollection
    *   The Omnipedia date collection service.
    *
@@ -44,22 +40,12 @@ class Timeline implements TimelineInterface {
    *   The Drupal string translation service.
    */
   public function __construct(
-    protected readonly CurrentDateInterface     $currentDate,
     protected readonly DateCollectionInterface  $dateCollection,
     protected readonly DateResolverInterface    $dateResolver,
     protected readonly DefaultDateInterface     $defaultDate,
     protected readonly DefinedDatesInterface    $definedDates,
     protected $stringTranslation,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setCurrentDate(string $date): void {
-
-    $this->currentDate->set($date);
-
-  }
 
   /**
    * {@inheritdoc}

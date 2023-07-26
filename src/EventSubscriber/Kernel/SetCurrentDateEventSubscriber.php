@@ -7,7 +7,7 @@ namespace Drupal\omnipedia_date\EventSubscriber\Kernel;
 use Drupal\Core\Routing\StackedRouteMatchInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRouteInterface;
-use Drupal\omnipedia_date\Service\TimelineInterface;
+use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -30,8 +30,8 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Routing\StackedRouteMatchInterface $currentRouteMatch
    *   The Drupal current route match service.
    *
-   * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
-   *   The Omnipedia timeline service.
+   * @param \ Drupal\omnipedia_date\Service\CurrentDateInterface $currentDate
+   *   The Omnipedia current date service.
    *
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
@@ -40,10 +40,10 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
    *   The Omnipedia wiki node route service.
    */
   public function __construct(
-    protected readonly StackedRouteMatchInterface  $currentRouteMatch,
-    protected readonly TimelineInterface           $timeline,
-    protected readonly WikiNodeResolverInterface   $wikiNodeResolver,
-    protected readonly WikiNodeRouteInterface      $wikiNodeRoute,
+    protected readonly StackedRouteMatchInterface $currentRouteMatch,
+    protected readonly CurrentDateInterface       $currentDate,
+    protected readonly WikiNodeResolverInterface  $wikiNodeResolver,
+    protected readonly WikiNodeRouteInterface     $wikiNodeRoute,
   ) {}
 
   /**
@@ -90,7 +90,7 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $this->timeline->setCurrentDate($currentDate);
+    $this->currentDate->set($currentDate);
 
   }
 

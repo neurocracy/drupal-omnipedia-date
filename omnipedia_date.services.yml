@@ -62,7 +62,7 @@ services:
     class: Drupal\omnipedia_date\EventSubscriber\Kernel\SetCurrentDateEventSubscriber
     arguments:
       - '@current_route_match'
-      - '@omnipedia.timeline'
+      - '@omnipedia_date.current_date'
       - '@omnipedia.wiki_node_resolver'
       - '@omnipedia.wiki_node_route'
     tags:
@@ -78,7 +78,6 @@ services:
   omnipedia.timeline:
     class: Drupal\omnipedia_date\Service\Timeline
     arguments:
-      - '@omnipedia_date.current_date'
       - '@omnipedia_date.date_collection'
       - '@omnipedia_date.date_resolver'
       - '@omnipedia_date.default_date'
