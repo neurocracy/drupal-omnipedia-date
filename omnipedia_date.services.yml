@@ -20,6 +20,14 @@ services:
       - '@omnipedia_date.default_date'
       - '@session'
 
+  omnipedia_date.date_resolver:
+    class: Drupal\omnipedia_date\Service\DateResolver
+    arguments:
+      - '@omnipedia_date.current_date'
+      - '@omnipedia_date.date_collection'
+      - '@omnipedia_date.default_date'
+      - '@omnipedia_date.defined_dates'
+
   omnipedia_date.default_date:
     class: Drupal\omnipedia_date\Service\DefaultDate
     arguments:
