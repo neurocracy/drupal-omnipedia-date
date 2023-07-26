@@ -108,34 +108,24 @@ class Timeline implements TimelineInterface {
    * {@inheritdoc}
    */
   public function getDateFormatted(
-    string|DateTimePlus $date = 'current', string $format = 'long'
+    string|DateTimePlus $dateOrKeyword = 'current', string $format = 'long'
   ): string|TranslatableMarkup {
 
-    if ($date === 'first') {
+    if ($dateOrKeyword === 'first') {
       return $this->t('First date');
 
-    } else if ($date === 'last') {
+    } else if ($dateOrKeyword === 'last') {
       return $this->t('Last date');
 
-    } else if ($date === 'current') {
-
-      $date = $this->currentDate->get();
-
-    } else if ($date === 'default') {
-
-      $date = $this->defaultDate->get();
-
-    }
-
-    if ($date instanceof DateTimePlus) {
+    } else if ($dateOrKeyword instanceof DateTimePlus) {
 
       /** @var \Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface */
-      $instance = $this->dateCollection->getFromDateTimeObject($date);
+      $instance = $this->dateCollection->getFromDateTimeObject($dateOrKeyword);
 
     } else {
 
       /** @var \Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface */
-      $instance = $this->dateCollection->get($date);
+      $instance = $this->dateResolver->resolve($dateOrKeyword);
 
     }
 

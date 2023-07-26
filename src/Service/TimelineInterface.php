@@ -31,7 +31,7 @@ interface TimelineInterface {
   /**
    * Get a formatted date.
    *
-   * @param string|\Drupal\Component\Datetime\DateTimePlus $date
+   * @param string|\Drupal\Component\Datetime\DateTimePlus $dateOrKeyword
    *   Must be one of:
    *
    *   - 'current': Indicates the current date is to be used. This is the
@@ -51,41 +51,22 @@ interface TimelineInterface {
    *   - An instance of \Drupal\Component\Datetime\DateTimePlus.
    *
    * @param string $format
-   *   One of:
-   *
-   *   - 'storage': The date format stored in the database. This is defined by
-   *     \Drupal\omnipedia_core\Service\Timeline::DATE_FORMAT_STORAGE.
-   *
-   *   - 'html': The date format used when outputting to HTML, usually in a
-   *     <time> element. This is defined by
-   *     \Drupal\omnipedia_core\Service\Timeline::DATE_FORMAT_HTML.
-   *
-   *   - 'long': The long user-friendly date output format. This is defined by
-   *     \Drupal\omnipedia_core\Service\Timeline::DATE_FORMAT_LONG. This is the
-   *     default.
-   *
-   *   - 'short': The short user-friendly date output format. This is defined by
-   *     \Drupal\omnipedia_core\Service\Timeline::DATE_FORMAT_SHORT.
-   *
-   *   Note that this parameter is ignored if $date is 'first' or 'last'.
+   *   Keyword of the format to output. Note that this parameter is ignored if
+   *   $dateOrKeyword is 'first' or 'last'.
    *
    * @return string|\Drupal\Core\StringTranslation\TranslatableMarkup
-   *   The provided $date as a string, formatted according to $format, or
-   *   localized text if $date is 'first' or 'last'.
+   *   The provided $dateOrKeyword formatted as a string according to $format,
+   *   or localized text if $dateOrKeyword is 'first' or 'last'.
    *
-   * @see $this->getDateObject()
-   *   $date is passed to this to ensure a date object is retrieved/created to
-   *   format from.
+   * @see \Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface::format()
+   *   Lists available $format keywords.
    *
    * @todo Should the 'first' and 'last' options be moved to their own method or
    *   does it make more sense to have them here so that code that calls this
    *   doesn't have to care about whether they're passing a date or a keyword?
-   *
-   * @throws \InvalidArgumentException
-   *   Exception thrown when the $format parameter isn't an expected value.
    */
   public function getDateFormatted(
-    string|DateTimePlus $date = 'current', string $format = 'long'
+    string|DateTimePlus $dateOrKeyword = 'current', string $format = 'long'
   ): string|TranslatableMarkup;
 
   /**
