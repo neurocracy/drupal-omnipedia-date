@@ -40,7 +40,7 @@ interface TimelineInterface {
    *   - 'first': Indicates that a localized string representing the first
    *     available date should be returned.
    *
-   *   - 'first': Indicates that a localized string representing the last
+   *   - 'last': Indicates that a localized string representing the last
    *     available date should be returned.
    *
    *   - 'default': Indicates the default date is to be used.
