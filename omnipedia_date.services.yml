@@ -7,17 +7,17 @@ services:
     tags:
       - { name: cache.context }
 
-  omnipedia_date.date_collection:
-    class: Drupal\omnipedia_date\Service\DateCollection
-    arguments:
-      - '@plugin.manager.omnipedia_date'
-
   omnipedia_date.current_date:
     class: Drupal\omnipedia_date\Service\CurrentDate
     arguments:
       - '@omnipedia_date.date_collection'
       - '@omnipedia_date.default_date'
       - '@session'
+
+  omnipedia_date.date_collection:
+    class: Drupal\omnipedia_date\Service\DateCollection
+    arguments:
+      - '@plugin.manager.omnipedia_date'
 
   omnipedia_date.date_resolver:
     class: Drupal\omnipedia_date\Service\DateResolver
@@ -40,10 +40,6 @@ services:
     arguments:
       - '@omnipedia.wiki_node_tracker'
       - '@state'
-
-  plugin.manager.omnipedia_date:
-    class: Drupal\omnipedia_date\PluginManager\OmnipediaDateManager
-    parent: default_plugin_manager
 
   omnipedia_date.config_update_default_date_event_subscriber:
     class: Drupal\omnipedia_date\EventSubscriber\Config\UpdateDefaultDateEventSubscriber
@@ -88,3 +84,7 @@ services:
       - '@omnipedia_date.default_date'
       - '@omnipedia_date.defined_dates'
       - '@string_translation'
+
+  plugin.manager.omnipedia_date:
+    class: Drupal\omnipedia_date\PluginManager\OmnipediaDateManager
+    parent: default_plugin_manager
