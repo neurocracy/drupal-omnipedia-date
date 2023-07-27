@@ -46,6 +46,9 @@ interface DefinedDatesInterface {
    * @return string
    *   The first defined date, in the storage format. May vary based on the
    *   $includeUnpublished parameter.
+   *
+   * @throws \UnexpectedValueException
+   *   If the list of defined dates is empty.
    */
   public function getFirstDate(bool $includeUnpublished = false): string;
 
@@ -59,6 +62,9 @@ interface DefinedDatesInterface {
    * @return string
    *   The last defined date, in the storage format. May vary based on the
    *   $includeUnpublished parameter.
+   *
+   * @throws \UnexpectedValueException
+   *   If the list of defined dates is empty.
    */
   public function getLastDate(bool $includeUnpublished = false): string;
 

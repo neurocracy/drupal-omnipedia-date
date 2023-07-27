@@ -159,7 +159,16 @@ class DefinedDates implements DefinedDatesInterface {
 
     $dates = $this->get($includeUnpublished);
 
-    return $dates[0];
+    /** @var string|bool */
+    $date = \reset($dates);
+
+    if ($date === false) {
+      throw new \UnexpectedValueException(
+        'Cannot get the first date because no dates are available!'
+      );
+    }
+
+    return $date;
 
   }
 
@@ -170,7 +179,15 @@ class DefinedDates implements DefinedDatesInterface {
 
     $dates = $this->get($includeUnpublished);
 
-    return \end($dates);
+    $date = \end($dates);
+
+    if ($date === false) {
+      throw new \UnexpectedValueException(
+        'Cannot get the last date because no dates are available!'
+      );
+    }
+
+    return $date;
 
   }
 
