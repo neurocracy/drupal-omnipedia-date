@@ -155,4 +155,94 @@ class DefinedDatesTest extends KernelTestBase {
 
   }
 
+  /**
+   * Data provider for self::testGetDefinedDates().
+   *
+   * @return array
+   */
+  public function getDefinedDatesProvider(): array {
+
+    return [
+      [
+        'dates' => [
+          'all' => [
+            '2049-09-28',
+            '2049-09-29',
+          ],
+          'published' => [
+            '2049-09-29',
+          ],
+        ],
+      ],
+      [
+        'dates' => [
+          'all' => [
+            '2049-09-28',
+            '2049-09-29',
+            '2049-09-30',
+            '2049-10-01',
+            '2049-10-02',
+          ],
+          'published' => [
+            '2049-09-29',
+            '2049-09-30',
+            '2049-10-01',
+            '2049-10-02',
+          ],
+        ],
+      ],
+      [
+        'dates' => [
+          'all' => [
+            '2049-09-28',
+            '2049-09-29',
+            '2049-09-30',
+            '2049-10-01',
+            '2049-10-02',
+          ],
+          'published' => [
+          ],
+        ],
+      ],
+    ];
+
+  }
+
+  /**
+   * Test getting defined dates.
+   *
+   * @dataProvider getDefinedDatesProvider
+   */
+  public function testGetDefinedDates(array $dates): void {
+
+    /** @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface */
+    $wikiNodeTracker = $this->prophesize(WikiNodeTrackerInterface::class);
+
+    $this->container->set(
+      'omnipedia.wiki_node_tracker', $wikiNodeTracker->reveal(),
+    );
+
+    /** @var \Drupal\omnipedia_date\Service\DefinedDatesInterface */
+    $definedDates = $this->container->get('omnipedia_date.defined_dates');
+
+    // Test that it picks up the dates saved to state.
+    $this->stateManager->set(self::DEFINED_DATES_STATE_KEY, $dates);
+
+    $this->assertEquals($dates['published'], $definedDates->get(false));
+
+    $this->assertEquals($dates['all'], $definedDates->get(true));
+
+    // Then delete the state entry to test that it's saved the dates to its own
+    // property and that it returns that as its first choice. If neither the
+    // state entry nor its property have defined dates saved, it would try to
+    // retrieve the dates from the mocked wiki node tracker service which in
+    // turn would fail the subsequent assertions.
+    $this->stateManager->delete(self::DEFINED_DATES_STATE_KEY);
+
+    $this->assertEquals($dates['published'], $definedDates->get(false));
+
+    $this->assertEquals($dates['all'], $definedDates->get(true));
+
+  }
+
 }
