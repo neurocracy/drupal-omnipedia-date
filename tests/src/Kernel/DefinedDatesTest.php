@@ -245,4 +245,90 @@ class DefinedDatesTest extends KernelTestBase {
 
   }
 
+  /**
+   * Test getting the first defined date.
+   *
+   * @dataProvider getDefinedDatesProvider
+   */
+  public function testGetFirstDate(array $dates): void {
+
+    /** @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface */
+    $wikiNodeTracker = $this->prophesize(WikiNodeTrackerInterface::class);
+
+    $this->container->set(
+      'omnipedia.wiki_node_tracker', $wikiNodeTracker->reveal(),
+    );
+
+    /** @var \Drupal\omnipedia_date\Service\DefinedDatesInterface */
+    $definedDates = $this->container->get('omnipedia_date.defined_dates');
+
+    $this->stateManager->set(self::DEFINED_DATES_STATE_KEY, $dates);
+
+    foreach ([
+      'all'       => true,
+      'published' => false,
+    ] as $key => $includeUnpublished) {
+
+      if (count($dates[$key]) === 0) {
+
+        $this->expectException(\UnexpectedValueException::class);
+
+        $definedDates->getFirstDate($includeUnpublished);
+
+      } else {
+
+        $this->assertEquals(
+          \reset($dates[$key]),
+          $definedDates->getFirstDate($includeUnpublished),
+        );
+
+      }
+
+    }
+
+  }
+
+  /**
+   * Test getting the last defined date.
+   *
+   * @dataProvider getDefinedDatesProvider
+   */
+  public function testGetLastDate(array $dates): void {
+
+    /** @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface */
+    $wikiNodeTracker = $this->prophesize(WikiNodeTrackerInterface::class);
+
+    $this->container->set(
+      'omnipedia.wiki_node_tracker', $wikiNodeTracker->reveal(),
+    );
+
+    /** @var \Drupal\omnipedia_date\Service\DefinedDatesInterface */
+    $definedDates = $this->container->get('omnipedia_date.defined_dates');
+
+    $this->stateManager->set(self::DEFINED_DATES_STATE_KEY, $dates);
+
+    foreach ([
+      'all'       => true,
+      'published' => false,
+    ] as $key => $includeUnpublished) {
+
+      if (count($dates[$key]) === 0) {
+
+        $this->expectException(\UnexpectedValueException::class);
+
+        $definedDates->getLastDate($includeUnpublished);
+
+      } else {
+
+        $this->assertEquals(
+          \end($dates[$key]),
+          $definedDates->getLastDate($includeUnpublished),
+        );
+
+      }
+
+    }
+
+  }
+
 }
