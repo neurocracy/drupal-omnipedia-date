@@ -9,7 +9,6 @@ use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
-use Drupal\node\NodeStorageInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -17,13 +16,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Event subscriber to update the default date when config is updated.
  */
 class UpdateDefaultDateEventSubscriber implements EventSubscriberInterface {
-
-  /**
-   * The Drupal node entity storage.
-   *
-   * @var \Drupal\node\NodeStorageInterface
-   */
-  protected readonly NodeStorageInterface $nodeStorage;
 
   /**
    * Event subscriber constructor; saves dependencies.
@@ -35,11 +27,9 @@ class UpdateDefaultDateEventSubscriber implements EventSubscriberInterface {
    *   The Omnipedia default date service.
    */
   public function __construct(
-    EntityTypeManagerInterface              $entityTypeManager,
-    protected readonly DefaultDateInterface $defaultDate,
-  ) {
-    $this->nodeStorage = $entityTypeManager->getStorage('node');
-  }
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly DefaultDateInterface       $defaultDate,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -95,7 +85,9 @@ class UpdateDefaultDateEventSubscriber implements EventSubscriberInterface {
     }
 
     /** @var \Drupal\omnipedia_core\Entity\NodeInterface|null */
-    $node = $this->nodeStorage->load($parameters['node']);
+    $node = $this->entityTypeManager->getStorage('node')->load(
+      $parameters['node'],
+    );
 
     if (!\is_object($node)) {
       return;
