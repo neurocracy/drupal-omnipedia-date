@@ -29,12 +29,6 @@ module](https://github.com/neurocracy/drupal-omnipedia-core).
 
 ----
 
-# Planned improvements
-
-* [Refactor out Timeline date object building, comparison, and formatting](https://github.com/neurocracy/drupal-omnipedia-date/issues/1).
-
-----
-
 # Requirements
 
 * [Drupal 9.5 or 10](https://www.drupal.org/download) ([Drupal 8 is end-of-life](https://www.drupal.org/psa-2021-11-30))
