@@ -13,7 +13,7 @@ use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\omnipedia_date\Service\DefinedDatesInterface;
 
 /**
- * The Omnipedia date resolver servivce.
+ * The Omnipedia date resolver service.
  */
 class DateResolver implements DateResolverInterface {
 

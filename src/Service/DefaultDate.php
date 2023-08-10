@@ -9,7 +9,7 @@ use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\omnipedia_date\Service\DateCollectionInterface;
 
 /**
- * The Omnipedia default date servivce.
+ * The Omnipedia default date service.
  */
 class DefaultDate implements DefaultDateInterface {
 

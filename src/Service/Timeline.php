@@ -27,7 +27,7 @@ class Timeline implements TimelineInterface {
    *   The Omnipedia date collection service.
    *
    * @param \Drupal\omnipedia_date\Service\DateResolverInterface $dateResolver
-   *   The Omnipedia date resolver servivce.
+   *   The Omnipedia date resolver service.
    *
    * @param \Drupal\omnipedia_date\Service\DefinedDatesInterface $definedDates
    *   The Omnipedia defined dates service.

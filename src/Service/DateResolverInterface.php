@@ -7,7 +7,7 @@ namespace Drupal\omnipedia_date\Service;
 use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 
 /**
- * The Omnipedia date resolver servivce interface.
+ * The Omnipedia date resolver service interface.
  */
 interface DateResolverInterface {
 

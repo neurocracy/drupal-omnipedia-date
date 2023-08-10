@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_date\Service;
 
 /**
- * The Omnipedia default date servivce interface.
+ * The Omnipedia default date service interface.
  */
 interface DefaultDateInterface {
 
