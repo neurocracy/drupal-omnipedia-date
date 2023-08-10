@@ -75,7 +75,39 @@ class SystemSiteInformationSettingsEventSubscriber implements EventSubscriberInt
       $dateOptions[$date] = $this->dateCollection->get($date)->format('short');
     }
 
-    $form['front_page']['default_date'] = [
+    /** @var int|bool Form array offset of 'front_page' key, if found, or false. */
+    $offset = \array_search('front_page', \array_keys($form));
+
+    /** @var array The Date form container element. */
+    $dateContainer = [
+      '#type'   => 'details',
+      '#open'   => true,
+      '#title'  => $this->t('Date'),
+    ];
+
+    // If we found the offset, place our Date form container just after the
+    // 'front_page' key. We could use #weight here, but that's its own mess
+    // because most or all of the existing elements don't have a #weight so we
+    // would have to add them ourselves here. Rather than doing that, we can
+    // splice in our key just after the 'front_page' key with this convoluted
+    // method because \array_splice() doesn't preserve keys.
+    //
+    // @see https://stackoverflow.com/questions/1783089/array-splice-for-associative-arrays/1783125#1783125
+    if (\is_int($offset)) {
+
+      // We want to insert our container after the 'front_page' key, not before.
+      $offset++;
+
+      $form = \array_slice($form, 0, $offset, true) + [
+        'date' => $dateContainer,
+      ] + \array_slice($form, $offset, null, true);
+
+    // If we didn't find the offset, just append it to the form.
+    } else {
+      $form['date'] = $dateContainer;
+    }
+
+    $form['date']['default_date'] = [
       '#type'           => 'select',
       '#default_value'  => $this->defaultDate->get(),
       '#options'        => $dateOptions,
