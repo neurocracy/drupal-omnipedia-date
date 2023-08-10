@@ -19,13 +19,6 @@ class DefaultDate implements DefaultDateInterface {
   protected const STATE_KEY = 'omnipedia.default_date';
 
   /**
-   * The default date as a string.
-   *
-   * @var string
-   */
-  protected string $defaultDate = '';
-
-  /**
    * Service constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_date\Service\DateCollectionInterface $dateCollection
@@ -40,60 +33,36 @@ class DefaultDate implements DefaultDateInterface {
   ) {}
 
   /**
-   * Find the default date if it hasn't yet been set.
-   *
-   * @see self::set()
-   *   Sets the default date.
-   *
-   * @throws \UnexpectedValueException
-   *   If a default date has not been set.
+   * {@inheritdoc}
    */
-  protected function find(): void {
+  public function set(string $date): void {
 
-    // Don't do this twice.
-    if (!empty($this->defaultDate)) {
-      return;
-    }
-
-    /** @var string|null */
-    $stateString = $this->stateManager->get(self::STATE_KEY);
-
-    // If we got a string instead of null, assume it's a date string, set it,
-    // and return.
-    if (\is_string($stateString) && !empty($stateString)) {
-
-      $this->set($stateString);
-
-      return;
-
-    }
-
-    throw new \UnexpectedValueException(
-      'No default date has been set!',
+    $this->stateManager->set(
+      self::STATE_KEY, $this->dateCollection->get($date)->format('storage'),
     );
 
   }
 
   /**
    * {@inheritdoc}
-   */
-  public function set(string $date): void {
-
-    $this->defaultDate = $this->dateCollection->get($date)->format('storage');
-
-    // Save to state storage.
-    $this->stateManager->set(self::STATE_KEY, $this->defaultDate);
-
-  }
-
-  /**
-   * {@inheritdoc}
+   *
+   * @throws \UnexpectedValueException
+   *   If a default date has not been set.
    */
   public function get(): string {
 
-    $this->find();
+    /** @var string|null */
+    $stateString = $this->stateManager->get(self::STATE_KEY);
 
-    return $this->defaultDate;
+    if (!\is_string($stateString) || empty($stateString)) {
+
+      throw new \UnexpectedValueException(
+        'No default date has been set!',
+      );
+
+    }
+
+    return $stateString;
 
   }
 
