@@ -41,14 +41,6 @@ services:
       - '@omnipedia.wiki_node_tracker'
       - '@state'
 
-  omnipedia_date.config_update_default_date_event_subscriber:
-    class: Drupal\omnipedia_date\EventSubscriber\Config\UpdateDefaultDateEventSubscriber
-    arguments:
-      - '@entity_type.manager'
-      - '@omnipedia_date.default_date'
-    tags:
-      - { name: 'event_subscriber', priority: 200 }
-
   omnipedia_date.entity_update_defined_dates_event_subscriber:
     class: Drupal\omnipedia_date\EventSubscriber\Entity\UpdateDefinedDatesEventSubscriber
     arguments:
