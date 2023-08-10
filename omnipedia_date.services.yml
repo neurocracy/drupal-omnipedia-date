@@ -50,6 +50,16 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  omnipedia_date.form_system_site_information_settings_event_subscriber:
+    class: Drupal\omnipedia_date\EventSubscriber\Form\SystemSiteInformationSettingsEventSubscriber
+    arguments:
+      - '@omnipedia_date.date_collection'
+      - '@omnipedia_date.default_date'
+      - '@omnipedia_date.defined_dates'
+      - '@string_translation'
+    tags:
+      - { name: 'event_subscriber' }
+
   omnipedia_date.kernel_set_current_date_event_subscriber:
     class: Drupal\omnipedia_date\EventSubscriber\Kernel\SetCurrentDateEventSubscriber
     arguments:
