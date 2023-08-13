@@ -50,7 +50,7 @@ class DefinedDatesTest extends KernelTestBase {
    *
    * @return array
    */
-  public function findDefinedDatesProvider(): array {
+  public static function findDefinedDatesProvider(): array {
 
     return [
       [
@@ -160,7 +160,7 @@ class DefinedDatesTest extends KernelTestBase {
    *
    * @return array
    */
-  public function getDefinedDatesProvider(): array {
+  public static function getDefinedDatesProvider(): array {
 
     return [
       [
