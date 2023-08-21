@@ -7,7 +7,7 @@ namespace Drupal\omnipedia_date\Plugin\Validation\Constraint;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Checks that the an entity's date range doesn't overlap another.
+ * Checks that an entity's date range doesn't overlap another.
  *
  * @Constraint(
  *   id     = "OmnipediaNonOverlappingEntityDateRange",
