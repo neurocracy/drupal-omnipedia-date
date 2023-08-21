@@ -14,9 +14,9 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 /**
- * Validates the OmnipediaNonOverlappingEntityDateRange constraint.
+ * Validates the NonOverlappingEntityDateRange constraint.
  */
-class OmnipediaNonOverlappingEntityDateRangeValidator extends ConstraintValidator implements ContainerInjectionInterface {
+class NonOverlappingEntityDateRangeValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
   /**
    * Constructor; saves dependencies.

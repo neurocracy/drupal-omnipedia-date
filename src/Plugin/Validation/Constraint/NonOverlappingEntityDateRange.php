@@ -10,12 +10,12 @@ use Symfony\Component\Validator\Constraint;
  * Checks that an entity's date range doesn't overlap another.
  *
  * @Constraint(
- *   id     = "OmnipediaNonOverlappingEntityDateRange",
- *   label  = @Translation("Omnipedia non-overlapping date range", context = "Validation"),
+ *   id     = "NonOverlappingEntityDateRange",
+ *   label  = @Translation("Non-overlapping date range", context = "Validation"),
  *   type   = "string"
  * )
  */
-class OmnipediaNonOverlappingEntityDateRange extends Constraint {
+class NonOverlappingEntityDateRange extends Constraint {
 
   /**
    * The default violation message.

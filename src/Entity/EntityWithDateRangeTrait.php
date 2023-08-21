@@ -48,7 +48,7 @@ trait EntityWithDateRangeTrait {
       //
       // @see \Drupal\datetime\Plugin\Field\FieldType\DateTimeItem::defaultStorageSettings()
       ->setSetting('datetime_type', 'date')
-      ->addConstraint('OmnipediaNonOverlappingEntityDateRange');
+      ->addConstraint('NonOverlappingEntityDateRange');
 
   }
 
