@@ -1,0 +1,4 @@
+entity.test_entity_with_date_range.canonical:
+  path: '/omnipedia_date_entity_date_range_test/{test_entity_with_date_range}'
+  requirements:
+    _access: 'true'

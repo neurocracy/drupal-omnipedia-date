@@ -22,6 +22,9 @@ use Drupal\omnipedia_date\Entity\EntityWithDateRangeTrait;
  *     "id"   = "id",
  *     "uuid" = "uuid",
  *   },
+ *   links = {
+ *     "canonical" = "/omnipedia_date_entity_date_range_test/{test_entity_with_date_range}",
+ *   },
  * )
  */
 class TestEntityWithDateRange extends ContentEntityBase implements EntityWithDateRangeInterface {
