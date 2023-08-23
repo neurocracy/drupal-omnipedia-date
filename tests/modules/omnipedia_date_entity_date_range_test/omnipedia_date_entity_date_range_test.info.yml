@@ -1,0 +1,10 @@
+name: 'Omnipedia - Date - Entity date range test'
+description: 'Test module for Omnipedia - Date and entities with date ranges'
+package: Testing
+type: module
+core_version_requirement: ^9.5 || ^10.0
+
+hidden: true
+
+dependencies:
+  - omnipedia_date:omnipedia_date
