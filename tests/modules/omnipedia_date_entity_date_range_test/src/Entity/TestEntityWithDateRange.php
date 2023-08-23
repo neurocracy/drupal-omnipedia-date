@@ -26,6 +26,13 @@ use Drupal\omnipedia_date\Entity\EntityWithDateRangeTrait;
  *     "canonical" = "/omnipedia_date_entity_date_range_test/{test_entity_with_date_range}",
  *   },
  * )
+ *
+ * @see \Drupal\entity_test\Entity\EntityTestDefaultAccess
+ *   Possibly the simplest entity definition acceptable by Drupal.
+ *
+ * @see \Drupal\entity_test\Entity\EntityTestConstraints
+ * @see \Drupal\entity_test\Entity\EntityTestConstraintViolation
+ *   Related to what we're testing with our entity.
  */
 class TestEntityWithDateRange extends ContentEntityBase implements EntityWithDateRangeInterface {
 
