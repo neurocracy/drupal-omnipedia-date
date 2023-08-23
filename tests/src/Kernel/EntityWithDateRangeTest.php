@@ -6,6 +6,7 @@ namespace Drupal\Tests\omnipedia_date\Kernel;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface;
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 
@@ -50,6 +51,32 @@ class EntityWithDateRangeTest extends KernelTestBase {
 
     $this->entityTypeManager = $this->container->get('entity_type.manager');
 
+    $this->installEntitySchema(self::TEST_ENTITY_TYPE);
+
+  }
+
+  /**
+   * Reloads the given entity from the storage and returns it.
+   *
+   * @param \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface $entity
+   *   The entity to be reloaded.
+   *
+   * @return \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface
+   *   The reloaded entity.
+   *
+   * @see \Drupal\KernelTests\Core\Entity\EntityKernelTestBase::reloadEntity()
+   *   Adapted from this core class.
+   */
+  protected function reloadEntity(
+    EntityWithDateRangeInterface $entity,
+  ): EntityWithDateRangeInterface {
+
+    /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */
+    $storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
+
+    $storage->resetCache([$entity->id()]);
+
+    return $storage->load($entity->id());
   }
 
   /**
@@ -112,7 +139,10 @@ class EntityWithDateRangeTest extends KernelTestBase {
     /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface */
     $entity = $storage->create($values);
 
-    $this->assertIsObject($entity);
+    $storage->save($entity);
+
+    /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface */
+    $entity = $this->reloadEntity($entity);
 
     $this->assertEquals($expected['start'], $entity->getStartDate());
 
