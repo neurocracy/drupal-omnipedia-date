@@ -24,6 +24,11 @@ use Drupal\omnipedia_date\Service\DefaultDateInterface;
 class EntityWithDateRangeTest extends KernelTestBase {
 
   /**
+   * The Drupal state key where we store the list of dates defined by content.
+   */
+  protected const DEFINED_DATES_STATE_KEY = 'omnipedia.defined_dates';
+
+  /**
    * The machine name of the entity used for the tests.
    */
   protected const TEST_ENTITY_TYPE = 'test_entity_with_date_range';
@@ -34,6 +39,27 @@ class EntityWithDateRangeTest extends KernelTestBase {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected readonly EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * Defined dates to generate for the test, in storage format.
+   *
+   * @var string[]
+   */
+  protected static array $definedDatesData = [
+    '2049-09-28',
+    '2049-09-29',
+    '2049-09-30',
+    '2049-10-01',
+    '2049-10-02',
+    '2049-10-03',
+    '2049-10-04',
+    '2049-10-05',
+    '2049-10-06',
+    '2049-10-07',
+    '2049-10-08',
+    '2049-10-09',
+    '2049-10-10',
+  ];
 
   /**
    * {@inheritdoc}
@@ -52,6 +78,19 @@ class EntityWithDateRangeTest extends KernelTestBase {
     $this->entityTypeManager = $this->container->get('entity_type.manager');
 
     $this->installEntitySchema(self::TEST_ENTITY_TYPE);
+
+    // Set the defined dates to state so that the Omnipedia defined dates
+    // service finds those and doesn't attempt to build them from the wiki node
+    // tracker, which would return no values as we haven't created any wiki
+    // nodes for this test.
+    //
+    // These are needed for the constraint validation test as the validator will
+    // call the Timeline service which in turn leads to various calls other
+    // services, including fetching the available defined dates.
+    $this->container->get('state')->set(self::DEFINED_DATES_STATE_KEY, [
+      'all'       => static::$definedDatesData,
+      'published' => static::$definedDatesData,
+    ]);
 
   }
 
@@ -147,6 +186,104 @@ class EntityWithDateRangeTest extends KernelTestBase {
     $this->assertEquals($expected['start'], $entity->getStartDate());
 
     $this->assertEquals($expected['end'], $entity->getEndDate());
+
+  }
+
+  /**
+   * Data provider for self::testNonOverlappingEntityDateRange().
+   *
+   * @return array
+   */
+  public static function nonOverlappingEntityDateRangeProvider(): array {
+
+    return [
+      [
+        'values' => [
+          ['date_range' => [
+            'value'     => '2049-09-28',
+            'end_value' => '2049-10-01',
+          ]],
+          ['date_range' => [
+            'value'     => '2049-10-02',
+            'end_value' => '2049-10-03',
+          ]],
+          ['date_range' => [
+            'value'     => '2049-10-04',
+            'end_value' => '2049-10-08',
+          ]],
+        ],
+        'expected' => [
+          ['violationsCount' => 0],
+          ['violationsCount' => 0],
+          ['violationsCount' => 0],
+        ],
+      ],
+      [
+        'values' => [
+          ['date_range' => [
+            'value'     => '2049-09-28',
+            'end_value' => '2049-10-01',
+          ]],
+          ['date_range' => [
+            'value'     => '2049-10-01',
+            'end_value' => '2049-10-03',
+          ]],
+          ['date_range' => [
+            'value'     => '2049-10-02',
+            'end_value' => '2049-10-08',
+          ]],
+          ['date_range' => [
+            'value'     => '2049-09-28',
+            'end_value' => '2049-10-10',
+          ]],
+        ],
+        'expected' => [
+          ['violationsCount' => 0],
+          ['violationsCount' => 1],
+          ['violationsCount' => 1],
+          ['violationsCount' => 3],
+        ],
+      ],
+    ];
+
+  }
+
+  /**
+   * Test the non-overlapping date range constraint validation.
+   *
+   * @dataProvider nonOverlappingEntityDateRangeProvider
+   *
+   * @see \Drupal\KernelTests\Core\Entity\EntityFieldTest::testEntityConstraintValidation()
+   *   Core class testing entity field constraint validation; used for
+   *   reference.
+   */
+  public function testNonOverlappingEntityDateRange(
+    array $providerValues, array $expected,
+  ): void {
+
+    /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */
+    $storage = $this->entityTypeManager->getStorage(self::TEST_ENTITY_TYPE);
+
+    /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface[] */
+    $entities = [];
+
+    foreach ($providerValues as $key => $values) {
+
+      /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface */
+      $entities[$key] = $storage->create($values);
+
+      // The entities must be saved to storage so that the constraint validator
+      // finds them when
+      $storage->save($entities[$key]);
+
+      $violations = $entities[$key]->date_range->validate();
+
+      $this->assertEquals(
+        $expected[$key]['violationsCount'],
+        $violations->count(),
+      );
+
+    }
 
   }
 
