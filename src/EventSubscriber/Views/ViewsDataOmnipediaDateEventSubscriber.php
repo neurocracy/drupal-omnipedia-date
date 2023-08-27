@@ -6,7 +6,7 @@ namespace Drupal\omnipedia_date\EventSubscriber\Views;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\omnipedia_core\Entity\Node;
+use Drupal\omnipedia_core\Entity\WikiNodeInfo;
 use Drupal\views_event_dispatcher\Event\Views\ViewsDataEvent;
 use Drupal\views_event_dispatcher\ViewsHookEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -48,14 +48,11 @@ class ViewsDataOmnipediaDateEventSubscriber implements EventSubscriberInterface 
    */
   public function onViewsData(ViewsDataEvent $event): void {
 
-    /** @var string */
-    $dateFieldName = Node::getWikiNodeDateFieldName();
-
     /** @var array */
     $data = [];
 
     // Top level key is the name of the database table.
-    $data['node__' . $dateFieldName]['omnipedia_date_filter'] = [
+    $data['node__' . WikiNodeInfo::DATE_FIELD]['omnipedia_date_filter'] = [
       'title'   => $this->t('Wiki date'),
       'group'   => $this->t('Omnipedia'),
       'filter'  => [
@@ -65,7 +62,7 @@ class ViewsDataOmnipediaDateEventSubscriber implements EventSubscriberInterface 
         'help'    => $this->t('Filter by wiki node dates.'),
         // This is the column in the field's table that this plug-in operates
         // on.
-        'field'   => $dateFieldName . '_value',
+        'field'   => WikiNodeInfo::DATE_FIELD . '_value',
         // This is the @ViewsFilter() annotation value of our plug-in.
         'id'      => 'omnipedia_date'
       ],
