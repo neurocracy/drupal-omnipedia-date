@@ -80,7 +80,7 @@ class UpdateDefinedDatesEventSubscriber implements EventSubscriberInterface {
       $event instanceof EntityInsertEvent ||
       $event instanceof EntityUpdateEvent
     ) {
-      $this->wikiNodeTracker->trackWikiNode($entity, $entity->getWikiNodeDate());
+      $this->wikiNodeTracker->trackWikiNode($entity);
 
     // If a node was deleted, stop tracking it.
     } else if ($event instanceof EntityDeleteEvent) {
