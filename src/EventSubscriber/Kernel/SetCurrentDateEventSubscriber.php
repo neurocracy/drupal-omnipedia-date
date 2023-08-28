@@ -31,7 +31,7 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Routing\StackedRouteMatchInterface $currentRouteMatch
    *   The Drupal current route match service.
    *
-   * @param \ Drupal\omnipedia_date\Service\CurrentDateInterface $currentDate
+   * @param \Drupal\omnipedia_date\Service\CurrentDateInterface $currentDate
    *   The Omnipedia current date service.
    *
    * @param \Drupal\typed_entity\EntityWrapperInterface $typedEntityRepositoryManager
