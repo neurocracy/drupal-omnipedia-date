@@ -63,6 +63,7 @@ services:
     arguments:
       - '@current_route_match'
       - '@omnipedia_date.current_date'
+      - '@Drupal\typed_entity\RepositoryManager'
       - '@omnipedia.wiki_node_resolver'
       - '@omnipedia.wiki_node_route'
     tags:

@@ -8,6 +8,7 @@ use Drupal\Core\Routing\StackedRouteMatchInterface;
 use Drupal\omnipedia_core\Service\WikiNodeResolverInterface;
 use Drupal\omnipedia_core\Service\WikiNodeRouteInterface;
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
+use Drupal\typed_entity\EntityWrapperInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -33,6 +34,9 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
    * @param \ Drupal\omnipedia_date\Service\CurrentDateInterface $currentDate
    *   The Omnipedia current date service.
    *
+   * @param \Drupal\typed_entity\EntityWrapperInterface $typedEntityRepositoryManager
+   *   The Typed Entity repository manager.
+   *
    * @param \Drupal\omnipedia_core\Service\WikiNodeResolverInterface $wikiNodeResolver
    *   The Omnipedia wiki node resolver service.
    *
@@ -42,6 +46,7 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
   public function __construct(
     protected readonly StackedRouteMatchInterface $currentRouteMatch,
     protected readonly CurrentDateInterface       $currentDate,
+    protected readonly EntityWrapperInterface     $typedEntityRepositoryManager,
     protected readonly WikiNodeResolverInterface  $wikiNodeResolver,
     protected readonly WikiNodeRouteInterface     $wikiNodeRoute,
   ) {}
@@ -78,12 +83,15 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
       $this->currentRouteMatch->getParameter('node')
     );
 
-    if (!$this->wikiNodeResolver->isWikiNode($node)) {
+    /** @var \Drupal\omnipedia_core\WrappedEntities\NodeWithWikiInfoInterface */
+    $wrappedNode = $this->typedEntityRepositoryManager->wrap($node);
+
+    if ($wrappedNode->isWikiNode() === false) {
       return;
     }
 
     /** @var string|null */
-    $currentDate = $node->getWikiNodeDate();
+    $currentDate = $wrappedNode->getWikiDate();
 
     // Bail if the date couldn't be found.
     if ($currentDate === null) {
