@@ -66,6 +66,7 @@ class EntityWithDateRangeTest extends KernelTestBase {
    */
   protected static $modules = [
     'omnipedia_core', 'omnipedia_date', 'omnipedia_date_entity_date_range_test',
+    'typed_entity',
   ];
 
   /**

@@ -21,7 +21,9 @@ class OmnipediaDatePluginTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['omnipedia_core', 'omnipedia_date'];
+  protected static $modules = [
+    'omnipedia_core', 'omnipedia_date', 'typed_entity',
+  ];
 
   /**
    * Attempt to create an Omnipedia date plug-in with the provided date string.

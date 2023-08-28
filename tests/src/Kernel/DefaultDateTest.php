@@ -46,7 +46,9 @@ class DefaultDateTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['omnipedia_core', 'omnipedia_date'];
+  protected static $modules = [
+    'omnipedia_core', 'omnipedia_date', 'typed_entity',
+  ];
 
   /**
    * {@inheritdoc}
