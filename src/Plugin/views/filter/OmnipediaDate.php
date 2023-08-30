@@ -23,13 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class OmnipediaDate extends InOperator {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
    * Constructs an OmnipediaDate object.
    *
    * @param array $configuration
@@ -46,12 +39,10 @@ class OmnipediaDate extends InOperator {
    */
   public function __construct(
     array $configuration, string $pluginId, array $pluginDefinition,
-    TimelineInterface $timeline
+    protected readonly TimelineInterface $timeline,
   ) {
 
     parent::__construct($configuration, $pluginId, $pluginDefinition);
-
-    $this->timeline = $timeline;
 
   }
 
@@ -62,13 +53,13 @@ class OmnipediaDate extends InOperator {
     ContainerInterface $container,
     array $configuration,
     $pluginId,
-    $pluginDefinition
+    $pluginDefinition,
   ) {
     return new static(
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('omnipedia.timeline')
+      $container->get('omnipedia.timeline'),
     );
   }
 
@@ -76,7 +67,7 @@ class OmnipediaDate extends InOperator {
    * {@inheritdoc}
    */
   public function init(
-    ViewExecutable $view, DisplayPluginBase $display, array &$options = null
+    ViewExecutable $view, DisplayPluginBase $display, array &$options = null,
   ) {
 
     parent::init($view, $display, $options);
@@ -104,7 +95,7 @@ class OmnipediaDate extends InOperator {
       // Array keys are the storage format stored in the node fields, while the
       // values are the user-friendly strings presented to the user.
       $options[$dateStorage] = $this->timeline->getDateFormatted(
-        $dateStorage, 'short'
+        $dateStorage, 'short',
       );
     }
 

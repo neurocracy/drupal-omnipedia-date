@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\omnipedia_date\EventSubscriber\Views;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\omnipedia_core\Entity\WikiNodeInfo;
 use Drupal\views_event_dispatcher\Event\Views\ViewsDataEvent;
 use Drupal\views_event_dispatcher\ViewsHookEvents;
@@ -27,9 +26,7 @@ class ViewsDataOmnipediaDateEventSubscriber implements EventSubscriberInterface 
    * @param \Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
    *   The Drupal string translation service.
    */
-  public function __construct(TranslationInterface $stringTranslation) {
-    $this->stringTranslation = $stringTranslation;
-  }
+  public function __construct(protected $stringTranslation) {}
 
   /**
    * {@inheritdoc}

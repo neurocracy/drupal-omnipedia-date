@@ -18,21 +18,12 @@ use Drupal\omnipedia_date\Service\TimelineInterface;
 class DatesCacheContext implements CalculatedCacheContextInterface {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
    * Constructor; saves dependencies.
    *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    */
-  public function __construct(TimelineInterface $timeline) {
-    $this->timeline = $timeline;
-  }
+  public function __construct(protected readonly TimelineInterface $timeline) {}
 
   /**
    * {@inheritdoc}

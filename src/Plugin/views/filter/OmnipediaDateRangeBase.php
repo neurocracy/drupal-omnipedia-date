@@ -51,13 +51,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class OmnipediaDateRangeBase extends FilterPluginBase {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
    * Constructs an OmnipediaDateRangeBase object.
    *
    * @param array $configuration
@@ -74,12 +67,10 @@ abstract class OmnipediaDateRangeBase extends FilterPluginBase {
    */
   public function __construct(
     array $configuration, string $pluginId, array $pluginDefinition,
-    TimelineInterface $timeline
+    protected readonly TimelineInterface $timeline,
   ) {
 
     parent::__construct($configuration, $pluginId, $pluginDefinition);
-
-    $this->timeline = $timeline;
 
   }
 
@@ -90,13 +81,13 @@ abstract class OmnipediaDateRangeBase extends FilterPluginBase {
     ContainerInterface $container,
     array $configuration,
     $pluginId,
-    $pluginDefinition
+    $pluginDefinition,
   ) {
     return new static(
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('omnipedia.timeline')
+      $container->get('omnipedia.timeline'),
     );
   }
 
@@ -134,7 +125,7 @@ abstract class OmnipediaDateRangeBase extends FilterPluginBase {
       // Array keys are the storage format stored in the node fields, while the
       // values are the user-friendly strings presented to the user.
       $options[$dateStorage] = $this->timeline->getDateFormatted(
-        $dateStorage, 'short'
+        $dateStorage, 'short',
       );
     }
 
@@ -161,10 +152,10 @@ abstract class OmnipediaDateRangeBase extends FilterPluginBase {
       $this->options['group'],
       (new Condition('OR'))
         ->condition(
-          "$this->tableAlias.$this->realField", $this->value, $this->operator
+          "$this->tableAlias.$this->realField", $this->value, $this->operator,
         )
         ->condition(
-          "$this->tableAlias.$this->realField", $this->value, 'IS NULL'
+          "$this->tableAlias.$this->realField", $this->value, 'IS NULL',
         )
     );
 

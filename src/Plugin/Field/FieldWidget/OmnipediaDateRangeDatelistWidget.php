@@ -35,13 +35,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implements ContainerFactoryPluginInterface {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
    * {@inheritdoc}
    *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
@@ -50,15 +43,14 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
   public function __construct(
     $pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition,
     array $settings, array $thirdPartySettings,
-    TimelineInterface $timeline
+    protected readonly TimelineInterface $timeline,
   ) {
+
     parent::__construct(
       $pluginId, $pluginDefinition, $fieldDefinition,
-      $settings, $thirdPartySettings
+      $settings, $thirdPartySettings,
     );
 
-    // Save dependencies.
-    $this->timeline = $timeline;
   }
 
   /**
@@ -67,7 +59,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
   public static function create(
     ContainerInterface $container,
     array $configuration,
-    $pluginId, $pluginDefinition
+    $pluginId, $pluginDefinition,
   ) {
     return new static(
       $pluginId,
@@ -75,7 +67,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
-      $container->get('omnipedia.timeline')
+      $container->get('omnipedia.timeline'),
     );
   }
 
@@ -84,7 +76,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
    */
   public function formElement(
     FieldItemListInterface $items, $delta, array $element,
-    array &$form, FormStateInterface $formState
+    array &$form, FormStateInterface $formState,
   ) {
     // Contains all dates that have nodes, in the 'storage' format. This
     // includes unpublished nodes.
@@ -98,7 +90,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
       // Array keys are the storage format stored in the node fields, while the
       // values are the user-friendly strings presented to the user.
       $options[$dateStorage] = $this->timeline->getDateFormatted(
-        $dateStorage, 'short'
+        $dateStorage, 'short',
       );
     }
 
@@ -132,7 +124,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
    * {@inheritdoc}
    */
   public function validateStartEnd(
-    array &$element, FormStateInterface $formState, array &$completeForm
+    array &$element, FormStateInterface $formState, array &$completeForm,
   ) {
     // Only call the parent validate if neither the start or end dates are set
     // to the first and last dates, respectively, as
@@ -152,7 +144,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
    * {@inheritdoc}
    */
   public function massageFormValues(
-    array $values, array $form, FormStateInterface $formState
+    array $values, array $form, FormStateInterface $formState,
   ) {
     // Convert the 'first' and 'last' start and end values to null so that
     // Drupal allows saving them to the date fields.

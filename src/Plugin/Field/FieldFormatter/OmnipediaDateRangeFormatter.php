@@ -31,13 +31,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class OmnipediaDateRangeFormatter extends FormatterBase {
 
   /**
-   * The Omnipedia timeline service.
-   *
-   * @var \Drupal\omnipedia_date\Service\TimelineInterface
-   */
-  protected TimelineInterface $timeline;
-
-  /**
    * {@inheritdoc}
    *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
@@ -46,15 +39,14 @@ class OmnipediaDateRangeFormatter extends FormatterBase {
   public function __construct(
     $plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition,
     array $settings, $label, $view_mode, array $third_party_settings,
-    TimelineInterface $timeline
+    protected readonly TimelineInterface $timeline,
   ) {
+
     parent::__construct(
       $plugin_id, $plugin_definition, $field_definition,
-      $settings, $label, $view_mode, $third_party_settings
+      $settings, $label, $view_mode, $third_party_settings,
     );
 
-    // Save dependencies.
-    $this->timeline = $timeline;
   }
 
   /**
@@ -62,7 +54,7 @@ class OmnipediaDateRangeFormatter extends FormatterBase {
    */
   public static function create(
     ContainerInterface $container,
-    array $configuration, $plugin_id, $plugin_definition
+    array $configuration, $plugin_id, $plugin_definition,
   ) {
     return new static(
       $plugin_id,
@@ -72,7 +64,7 @@ class OmnipediaDateRangeFormatter extends FormatterBase {
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('omnipedia.timeline')
+      $container->get('omnipedia.timeline'),
     );
   }
 
