@@ -83,6 +83,10 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
       $this->currentRouteMatch->getParameter('node')
     );
 
+    if (!\is_object($node)) {
+      return;
+    }
+
     /** @var \Drupal\omnipedia_core\WrappedEntities\NodeWithWikiInfoInterface */
     $wrappedNode = $this->typedEntityRepositoryManager->wrap($node);
 
