@@ -39,7 +39,7 @@ class OmnipediaDateRangeEndFormatter extends FormatterBase {
   public function __construct(
     $plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition,
     array $settings, $label, $view_mode, array $third_party_settings,
-    TimelineInterface $timeline,
+    protected readonly TimelineInterface $timeline,
   ) {
 
     parent::__construct(
