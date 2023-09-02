@@ -124,7 +124,7 @@ class OmnipediaDatePluginTest extends KernelTestBase {
 
     $plugin->format('baby-shark-do-do-do-do');
 
-    for ($i=0; $i <= 10; $i++) {
+    for ($i = 0; $i <= 10; $i++) {
 
       $this->expectException(\InvalidArgumentException::class);
 
