@@ -97,6 +97,7 @@ class OmnipediaDateRangeTest extends UnitTestCase {
   public static function validDateRangesProvider(): array {
 
     return [
+      ['2049-09-28', '2049-09-28'],
       ['2049-09-28', '2049-10-01'],
       ['2049-09-29', '2049-10-10'],
       ['2030-01-29', '2049-10-15'],
@@ -126,7 +127,7 @@ class OmnipediaDateRangeTest extends UnitTestCase {
 
     $this->assertEquals(false, $endDateObject->hasErrors());
 
-    $this->assertEquals(true, $startDateObject < $endDateObject);
+    $this->assertEquals(true, $startDateObject <= $endDateObject);
 
   }
 
@@ -139,7 +140,6 @@ class OmnipediaDateRangeTest extends UnitTestCase {
   public static function invalidDateRangesProvider(): array {
 
     return [
-      ['2049-09-28', '2049-09-28'],
       ['2049-09-29', '2049-08-30'],
       ['2049-10-10', '2049-10-01'],
     ];

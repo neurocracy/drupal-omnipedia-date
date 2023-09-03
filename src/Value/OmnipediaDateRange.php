@@ -36,12 +36,6 @@ class OmnipediaDateRange implements OmnipediaDateRangeInterface {
       );
     }
 
-    if ($this->startDate === $this->endDate) {
-      throw new \LogicException(
-        'The start and end dates cannot be the same!'
-      );
-    }
-
   }
 
   /**
