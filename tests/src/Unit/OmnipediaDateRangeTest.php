@@ -89,67 +89,87 @@ class OmnipediaDateRangeTest extends UnitTestCase {
   }
 
   /**
-   * Test various valid date range start and end dates.
+   * Data provider for self::testValidDateRanges().
+   *
+   * @return array
+   *   Valid date ranges defined as start and end date strings.
    */
-  public function testValidDateRanges(): void {
+  public static function validDateRangesProvider(): array {
 
-    /** @var array[] Valid date ranges defined as start and end date strings. */
-    $ranges = [
+    return [
       ['2049-09-28', '2049-10-01'],
       ['2049-09-29', '2049-10-10'],
       ['2030-01-29', '2049-10-15'],
     ];
 
-    foreach ($ranges as $range) {
+  }
 
-      /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
-      $dateRange = $this->createDateRange($range[0], $range[1]);
+  /**
+   * Test various valid date range start and end dates.
+   *
+   * @dataProvider validDateRangesProvider
+   */
+  public function testValidDateRanges(
+    string $startDate, string $endDate,
+  ): void {
 
-      /** @var \Drupal\Component\Datetime\DateTimePlus */
-      $startDate = $dateRange->getStartDate();
+    /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
+    $dateRange = $this->createDateRange($startDate, $endDate);
 
-      /** @var \Drupal\Component\Datetime\DateTimePlus */
-      $endDate = $dateRange->getEndDate();
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
+    $startDateObject = $dateRange->getStartDate();
 
-      $this->assertEquals(false, $startDate->hasErrors());
+    /** @var \Drupal\Component\Datetime\DateTimePlus */
+    $endDateObject = $dateRange->getEndDate();
 
-      $this->assertEquals(false, $endDate->hasErrors());
+    $this->assertEquals(false, $startDateObject->hasErrors());
 
-      $this->assertEquals(true, $startDate < $endDate);
+    $this->assertEquals(false, $endDateObject->hasErrors());
 
-    }
+    $this->assertEquals(true, $startDateObject < $endDateObject);
 
   }
 
   /**
-   * Test that various invalid date range start and end dates throw exceptions.
+   * Data provider for self::testInvalidDateRanges().
+   *
+   * @return array
+   *   Invalid date ranges defined as start and end date strings.
    */
-  public function testInvalidDateRanges(): void {
+  public static function invalidDateRangesProvider(): array {
 
-    /** @var array[] Invalid date ranges defined as start and end date strings. */
-    $ranges = [
+    return [
       ['2049-09-28', '2049-09-28'],
       ['2049-09-29', '2049-08-30'],
       ['2049-10-10', '2049-10-01'],
     ];
 
-    foreach ($ranges as $range) {
+  }
 
-      $this->expectException(\LogicException::class);
+  /**
+   * Test that various invalid date range start and end dates throw exceptions.
+   *
+   * @dataProvider invalidDateRangesProvider
+   */
+  public function testInvalidDateRanges(
+    string $startDate, string $endDate,
+  ): void {
 
-      /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
-      $dateRange = $this->createDateRange($range[0], $range[1]);
+    $this->expectException(\LogicException::class);
 
-    }
+    /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
+    $dateRange = $this->createDateRange($startDate, $endDate);
 
   }
 
   /**
-   * Test that the date range overlap method correctly identifies such ranges.
+   * Data provider for self::testOverlapsWithRange().
+   *
+   * @return array
    */
-  public function testOverlapsWithRange(): void {
+  public static function overlapsWithRangeProvider(): array {
 
-    $ranges = [
+    return [
       //   |----|
       // |----|
       [['2049-10-01', '2049-10-10'], ['2049-09-28', '2049-10-05'], true],
@@ -176,42 +196,64 @@ class OmnipediaDateRangeTest extends UnitTestCase {
       [['2049-10-05', '2049-10-10'], ['2049-09-28', '2049-10-01'], false],
     ];
 
-    foreach ($ranges as $values) {
+  }
 
-      /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
-      $dateRange1 = $this->createDateRange($values[0][0], $values[0][1]);
+  /**
+   * Test that the date range overlap method correctly identifies such ranges.
+   *
+   * @dataProvider overlapsWithRangeProvider
+   */
+  public function testOverlapsWithRange(
+    array $dateRange1Values, array $dateRange2Values, bool $expectOverlap,
+  ): void {
 
-      /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
-      $dateRange2 = $this->createDateRange($values[1][0], $values[1][1]);
+    /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
+    $dateRange1Object = $this->createDateRange(
+      $dateRange1Values[0], $dateRange1Values[1],
+    );
 
-      $this->assertEquals(
-        $values[2], $dateRange1->overlapsWithRange($dateRange2)
-      );
+    /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
+    $dateRange2Object = $this->createDateRange(
+      $dateRange2Values[0], $dateRange2Values[1],
+    );
 
-    }
+    $this->assertEquals(
+      $expectOverlap, $dateRange1Object->overlapsWithRange($dateRange2Object),
+    );
+
+  }
+
+  /**
+   * Data provider for self::testOverlapsDate().
+   *
+   * @return array
+   */
+  public static function overlapsWithDateProvider(): array {
+
+    return [
+      ['2049-09-27', false],
+      ['2049-09-28', true],
+      ['2049-09-30', true],
+      ['2049-10-03', true],
+      ['2049-10-07', false],
+      ['2049-10-10', false],
+    ];
 
   }
 
   /**
    * Test that the date overlap method correctly identifies such dates.
+   *
+   * @dataProvider overlapsWithDateProvider
    */
-  public function testOverlapsDate(): void {
+  public function testOverlapsDate(string $date, bool $expectOverlap): void {
 
     /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */
     $dateRange = $this->createDateRange('2049-09-28', '2049-10-05');
 
-    foreach ([
-      '2049-09-27' => false,
-      '2049-09-28' => true,
-      '2049-09-30' => true,
-      '2049-10-03' => true,
-      '2049-10-07' => false,
-      '2049-10-10' => false,
-    ] as $date => $expected) {
-      $this->assertEquals(
-        $expected, $dateRange->overlapsDate($this->createDate($date))
-      );
-    }
+    $this->assertEquals(
+      $expectOverlap, $dateRange->overlapsDate($this->createDate($date)),
+    );
 
   }
 
