@@ -61,7 +61,7 @@ class NonOverlappingEntityDateRangeValidator extends ConstraintValidator impleme
       // Tag the query so it can be altered if needed.
       ->addTag('non_overlapping_entity_date_range_validate')
       // This is the entity being validated. Retrieve with
-      // $query->getMetaData('entity_validate') if alterting this query.
+      // $query->getMetaData('entity_validate') if altering this query.
       ->addMetaData('entity_validate', $entity)
       ->accessCheck(true);
 
