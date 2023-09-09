@@ -273,8 +273,9 @@ class EntityWithDateRangeTest extends KernelTestBase {
       /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface */
       $entities[$key] = $storage->create($values);
 
-      // The entities must be saved to storage so that the constraint validator
-      // finds them when
+      // The entities must be saved to storage so that
+      // NonOverlappingEntityDateRangeValidator finds them when it runs the
+      // entity query to check for overlaps.
       $storage->save($entities[$key]);
 
       $violations = $entities[$key]->date_range->validate();
