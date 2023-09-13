@@ -9,7 +9,9 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeDatelistWidget;
+use Drupal\omnipedia_date\Service\DateResolverInterface;
 use Drupal\omnipedia_date\Service\TimelineInterface;
+use Drupal\omnipedia_date\Value\OmnipediaDateRange;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -37,13 +39,17 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
   /**
    * {@inheritdoc}
    *
+   * @param \Drupal\omnipedia_date\Service\DateResolverInterface $dateResolver
+   *   The Omnipedia date resolver service.
+   *
    * @param \Drupal\omnipedia_date\Service\TimelineInterface $timeline
    *   The Omnipedia timeline service.
    */
   public function __construct(
     $pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition,
     array $settings, array $thirdPartySettings,
-    protected readonly TimelineInterface $timeline,
+    protected readonly DateResolverInterface  $dateResolver,
+    protected readonly TimelineInterface      $timeline,
   ) {
 
     parent::__construct(
@@ -67,6 +73,7 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
+      $container->get('omnipedia_date.date_resolver'),
       $container->get('omnipedia.timeline'),
     );
   }
@@ -122,22 +129,36 @@ class OmnipediaDateRangeDatelistWidget extends DateRangeDatelistWidget implement
 
   /**
    * {@inheritdoc}
+   *
+   * @see \Drupal\datetime_range\Plugin\Field\FieldWidget\DateRangeWidgetBase::validateStartEnd()
+   *   Does basically the same thing we do here and nothing else, nor does it
+   *   call any parent method, and it assumes '#value' will be an array rather
+   *   than a string; because of these reasons, we don't call this to avoid
+   *   fatal errors.
    */
   public function validateStartEnd(
     array &$element, FormStateInterface $formState, array &$completeForm,
   ) {
-    // Only call the parent validate if neither the start or end dates are set
-    // to the first and last dates, respectively, as
-    // DateRangeWidgetBase::validateStartEnd() expects their values to contain
-    // arrays with DrupalDateTime objects, which they don't if set to the first
-    // or last date values. If one of these values is set and the other is set
-    // to a specific date, it will always be valid by definition.
-    if (
-      $element['value']['#value'] !== 'first' &&
-      $element['end_value']['#value'] !== 'last'
-    ) {
-      parent::validateStartEnd($element, $formState, $completeForm);
+
+    // Attempt to build a date range object, which will throw an exception if
+    // the start date is set to after the end date, thus validating it for us.
+    try {
+
+      $dateRange = new OmnipediaDateRange(
+        $this->dateResolver->resolve(
+          $element['value']['#value'],
+        )->getDateObject(),
+        $this->dateResolver->resolve(
+          $element['end_value']['#value'],
+        )->getDateObject(),
+      );
+
+    } catch (\Exception $exception) {
+
+      $formState->setError($element, $exception->getMessage());
+
     }
+
   }
 
   /**

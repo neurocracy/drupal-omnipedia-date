@@ -61,7 +61,7 @@ class NonOverlappingEntityDateRangeValidator extends ConstraintValidator impleme
       // Tag the query so it can be altered if needed.
       ->addTag('non_overlapping_entity_date_range_validate')
       // This is the entity being validated. Retrieve with
-      // $query->getMetaData('entity_validate') if alterting this query.
+      // $query->getMetaData('entity_validate') if altering this query.
       ->addMetaData('entity_validate', $entity)
       ->accessCheck(true);
 
@@ -93,9 +93,24 @@ class NonOverlappingEntityDateRangeValidator extends ConstraintValidator impleme
         /** @var string  */
         $otherEndDate = $otherEntity->getEndDate();
 
-        if (!$this->timeline->doDateRangesOverlap(
-          $startDate, $endDate, $otherStartDate, $otherEndDate, true
-        )) {
+        // This will attempt to build two date range objects and one or both may
+        // throw an exception which needs to be caught and output as a violation
+        // rather than causing a fatal error.
+        try {
+
+          $overlap = $this->timeline->doDateRangesOverlap(
+            $startDate, $endDate, $otherStartDate, $otherEndDate, true,
+          );
+
+        } catch (\Exception $exception) {
+
+          $this->context->addViolation($exception->getMessage());
+
+          continue;
+
+        }
+
+        if ($overlap === false) {
           continue;
         }
 
