@@ -19,6 +19,15 @@ use Drupal\typed_entity\EntityWrapperInterface;
  * @group omnipedia
  *
  * @group omnipedia_date
+ *
+ * @see \Drupal\omnipedia_date_current_date_test\EventSubscriber\Kernel\CurrentDateHeaderEventSubscriber
+ *   Event subscriber that outputs the current date as an HTTP header to work
+ *   around the fact that we can't easily access the session data of the
+ *   requested pages in a functional test.
+ *
+ * @see \Drupal\Tests\system\Functional\Session\SessionTest
+ *   Uses the same approach to getting session data via HTTP headers output by
+ *   an event subscriber in a test module.
  */
 class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 

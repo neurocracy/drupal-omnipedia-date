@@ -11,6 +11,10 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Kernel event subscriber to add the current date HTTP header on all responses.
+ *
+ * @see \Drupal\session_test\EventSubscriber\SessionTestSubscriber
+ *   Example of a core test module subscriber using headers to work around issue
+ *   that functional tests are a different session.
  */
 class CurrentDateHeaderEventSubscriber implements EventSubscriberInterface {
 
