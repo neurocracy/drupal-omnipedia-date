@@ -1,0 +1,11 @@
+name: 'Omnipedia - Date - Current date test'
+description: 'Test module for Omnipedia - Date and its current date system'
+package: Testing
+type: module
+core_version_requirement: ^9.5 || ^10.0
+php: 8.1
+
+hidden: true
+
+dependencies:
+  - omnipedia_date:omnipedia_date

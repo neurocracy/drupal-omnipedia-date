@@ -1,0 +1,8 @@
+services:
+
+  omnipedia_date_current_date_test.kernel_current_date_header_event_subscriber:
+    class: Drupal\omnipedia_date_current_date_test\EventSubscriber\Kernel\CurrentDateHeaderEventSubscriber
+    arguments:
+      - '@omnipedia_date.current_date'
+    tags:
+      - { name: 'event_subscriber' }
