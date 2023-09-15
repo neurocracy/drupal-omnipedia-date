@@ -215,6 +215,15 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 
       $this->drupalGet($node->toUrl());
 
+      /** @var int The actual status code from the Drupal response. */
+      $actualStatusCode = $this->getSession()->getStatusCode();
+
+      // Attempts to catch any unexpected errors that may result in the header
+      // being correctly output but still failing on some level thereafter.
+      $this->assertLessThan(400, $actualStatusCode, \sprintf(
+        'Expected a status code of less than 400! Got: %d', $actualStatusCode,
+      ));
+
       if ($wrappedNode->isWikiNode() === true) {
 
         $this->assertSession()->responseHeaderEquals(
