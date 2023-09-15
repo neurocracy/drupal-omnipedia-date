@@ -3,6 +3,7 @@ description: 'Test module for Omnipedia - Date and entities with date ranges'
 package: Testing
 type: module
 core_version_requirement: ^9.5 || ^10.0
+php: 8.1
 
 hidden: true
 
