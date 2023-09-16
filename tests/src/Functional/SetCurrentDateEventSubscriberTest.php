@@ -238,4 +238,64 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 
   }
 
+  /**
+   * Test that visiting the edit and preview routes update the current date.
+   */
+  public function testEditAndPreviewRoutes(): void {
+
+    $user = $this->drupalCreateUser([
+      'access content',
+      'edit any ' . WikiNodeInfo::TYPE . ' content',
+      'edit any page content',
+    ]);
+
+    $this->drupalLogin($user);
+
+    foreach ($this->nodes as $nid => $node) {
+
+      /** @var \Drupal\omnipedia_core\WrappedEntities\NodeWithWikiInfoInterface */
+      $wrappedNode = $this->typedEntityRepositoryManager->wrap($node);
+
+      $this->drupalGet($node->toUrl('edit-form'));
+
+      /** @var int The actual status code from the Drupal response. */
+      $actualStatusCode = $this->getSession()->getStatusCode();
+
+      // Attempts to catch any unexpected errors that may result in the header
+      // being correctly output but still failing on some level thereafter.
+      $this->assertLessThan(400, $actualStatusCode, \sprintf(
+        'Expected a status code of less than 400! Got: %d', $actualStatusCode,
+      ));
+
+      if ($wrappedNode->isWikiNode() === true) {
+
+        $this->assertSession()->responseHeaderEquals(
+          CurrentDateHeaderEventSubscriber::HEADER, $wrappedNode->getWikiDate(),
+        );
+
+      }
+
+      $this->submitForm([], 'Preview');
+
+      /** @var int The actual status code from the Drupal response. */
+      $actualStatusCode = $this->getSession()->getStatusCode();
+
+      // Attempts to catch any unexpected errors that may result in the header
+      // being correctly output but still failing on some level thereafter.
+      $this->assertLessThan(400, $actualStatusCode, \sprintf(
+        'Expected a status code of less than 400! Got: %d', $actualStatusCode,
+      ));
+
+      if ($wrappedNode->isWikiNode() === true) {
+
+        $this->assertSession()->responseHeaderEquals(
+          CurrentDateHeaderEventSubscriber::HEADER, $wrappedNode->getWikiDate(),
+        );
+
+      }
+
+    }
+
+  }
+
 }
