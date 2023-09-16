@@ -135,13 +135,6 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
       'type'  => 'page',
     ]);
 
-    /** @var \Drupal\Core\Config\Config */
-    $config = $this->container->get('config.factory')->getEditable(
-      'system.site',
-    );
-
-    $config->set('page.front', $node->toUrl()->toString())->save();
-
   }
 
   /**
