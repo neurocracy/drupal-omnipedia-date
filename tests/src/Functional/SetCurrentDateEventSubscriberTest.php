@@ -90,6 +90,13 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
   ];
 
   /**
+   * Node objects for the tests, keyed by their nid.
+   *
+   * @var \Drupal\node\NodeInterface[]
+   */
+  protected array $nodes;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -135,6 +142,34 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
       'type'  => 'page',
     ]);
 
+    $parameters = static::generateWikiNodeValues();
+
+    /** @var \Drupal\node\NodeInterface[] Node objects keyed by their nid. */
+    $nodes = [];
+
+    foreach ($parameters as $values) {
+
+      /** @var \Drupal\node\NodeInterface */
+      $node = $this->drupalCreateNode($values);
+
+      $this->wikiNodeTracker->trackWikiNode($node);
+
+      $nodes[$node->id()] = $node;
+
+      // Roughly 1 out of 3 times, insert a non-wiki 'page' node type.
+      if (\rand(1, 3) === 1) {
+
+        /** @var \Drupal\node\NodeInterface */
+        $node = $this->drupalCreateNode(['type' => 'page']);
+
+        $nodes[$node->id()] = $node;
+
+      }
+
+      $this->nodes = $nodes;
+
+    }
+
   }
 
   /**
@@ -175,33 +210,7 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 
     }
 
-    $parameters = static::generateWikiNodeValues();
-
-    /** @var \Drupal\node\NodeInterface[] Node objects keyed by their nid. */
-    $nodes = [];
-
-    foreach ($parameters as $values) {
-
-      /** @var \Drupal\node\NodeInterface */
-      $node = $this->drupalCreateNode($values);
-
-      $this->wikiNodeTracker->trackWikiNode($node);
-
-      $nodes[$node->id()] = $node;
-
-      // Roughly 1 out of 3 times, insert a non-wiki 'page' node type.
-      if (\rand(1, 3) === 1) {
-
-        /** @var \Drupal\node\NodeInterface */
-        $node = $this->drupalCreateNode(['type' => 'page']);
-
-        $nodes[$node->id()] = $node;
-
-      }
-
-    }
-
-    foreach ($nodes as $nid => $node) {
+    foreach ($this->nodes as $nid => $node) {
 
       /** @var \Drupal\omnipedia_core\WrappedEntities\NodeWithWikiInfoInterface */
       $wrappedNode = $this->typedEntityRepositoryManager->wrap($node);
