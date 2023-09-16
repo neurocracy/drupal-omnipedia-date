@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\omnipedia_date\Functional;
 
+use Drupal\node\NodeInterface;
 use Drupal\omnipedia_core\Entity\WikiNodeInfo;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
 use Drupal\omnipedia_date_current_date_test\EventSubscriber\Kernel\CurrentDateHeaderEventSubscriber;
@@ -191,6 +192,37 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
   }
 
   /**
+   * Assert that the provided node (if wiki node) matches current date header.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   */
+  protected function assertCurrentDateHeaderMatchesNode(
+    NodeInterface $node,
+  ): void {
+
+    /** @var \Drupal\omnipedia_core\WrappedEntities\NodeWithWikiInfoInterface */
+    $wrappedNode = $this->typedEntityRepositoryManager->wrap($node);
+
+    /** @var int The actual status code from the Drupal response. */
+    $actualStatusCode = $this->getSession()->getStatusCode();
+
+    // Attempts to catch any unexpected errors that may result in the header
+    // being correctly output but still failing on some level thereafter.
+    $this->assertLessThan(400, $actualStatusCode, \sprintf(
+      'Expected a status code of less than 400! Got: %d', $actualStatusCode,
+    ));
+
+    if ($wrappedNode->isWikiNode() === true) {
+
+      $this->assertSession()->responseHeaderEquals(
+        CurrentDateHeaderEventSubscriber::HEADER, $wrappedNode->getWikiDate(),
+      );
+
+    }
+
+  }
+
+  /**
    * Test that visiting various wiki node canonical routes updates current date.
    *
    * @dataProvider canonicalRouteUserTypeProvider
@@ -212,27 +244,9 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 
     foreach ($this->nodes as $nid => $node) {
 
-      /** @var \Drupal\omnipedia_core\WrappedEntities\NodeWithWikiInfoInterface */
-      $wrappedNode = $this->typedEntityRepositoryManager->wrap($node);
-
       $this->drupalGet($node->toUrl());
 
-      /** @var int The actual status code from the Drupal response. */
-      $actualStatusCode = $this->getSession()->getStatusCode();
-
-      // Attempts to catch any unexpected errors that may result in the header
-      // being correctly output but still failing on some level thereafter.
-      $this->assertLessThan(400, $actualStatusCode, \sprintf(
-        'Expected a status code of less than 400! Got: %d', $actualStatusCode,
-      ));
-
-      if ($wrappedNode->isWikiNode() === true) {
-
-        $this->assertSession()->responseHeaderEquals(
-          CurrentDateHeaderEventSubscriber::HEADER, $wrappedNode->getWikiDate(),
-        );
-
-      }
+      $this->assertCurrentDateHeaderMatchesNode($node);
 
     }
 
@@ -253,46 +267,13 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 
     foreach ($this->nodes as $nid => $node) {
 
-      /** @var \Drupal\omnipedia_core\WrappedEntities\NodeWithWikiInfoInterface */
-      $wrappedNode = $this->typedEntityRepositoryManager->wrap($node);
-
       $this->drupalGet($node->toUrl('edit-form'));
 
-      /** @var int The actual status code from the Drupal response. */
-      $actualStatusCode = $this->getSession()->getStatusCode();
-
-      // Attempts to catch any unexpected errors that may result in the header
-      // being correctly output but still failing on some level thereafter.
-      $this->assertLessThan(400, $actualStatusCode, \sprintf(
-        'Expected a status code of less than 400! Got: %d', $actualStatusCode,
-      ));
-
-      if ($wrappedNode->isWikiNode() === true) {
-
-        $this->assertSession()->responseHeaderEquals(
-          CurrentDateHeaderEventSubscriber::HEADER, $wrappedNode->getWikiDate(),
-        );
-
-      }
+      $this->assertCurrentDateHeaderMatchesNode($node);
 
       $this->submitForm([], 'Preview');
 
-      /** @var int The actual status code from the Drupal response. */
-      $actualStatusCode = $this->getSession()->getStatusCode();
-
-      // Attempts to catch any unexpected errors that may result in the header
-      // being correctly output but still failing on some level thereafter.
-      $this->assertLessThan(400, $actualStatusCode, \sprintf(
-        'Expected a status code of less than 400! Got: %d', $actualStatusCode,
-      ));
-
-      if ($wrappedNode->isWikiNode() === true) {
-
-        $this->assertSession()->responseHeaderEquals(
-          CurrentDateHeaderEventSubscriber::HEADER, $wrappedNode->getWikiDate(),
-        );
-
-      }
+      $this->assertCurrentDateHeaderMatchesNode($node);
 
     }
 
