@@ -133,7 +133,6 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
       'omnipedia.wiki_node_tracker'
     );
 
-    // Set the default date, but use a date
     $this->defaultDate->set(self::DEFAULT_DATE);
 
     $this->drupalCreateContentType(['type' => 'page']);
