@@ -2,3 +2,13 @@ entity.test_entity_with_date_range.canonical:
   path: '/omnipedia_date_entity_date_range_test/{test_entity_with_date_range}'
   requirements:
     _access: 'true'
+
+entity.test_entity_with_date_range.edit_form:
+  path: '/omnipedia_date_entity_date_range_test/{test_entity_with_date_range}/edit'
+  defaults:
+    _entity_form: test_entity_with_date_range.default
+    _title: 'Edit test entity with date range'
+  requirements:
+    _entity_access: 'test_entity_with_date_range.update'
+  options:
+    _admin_route: true

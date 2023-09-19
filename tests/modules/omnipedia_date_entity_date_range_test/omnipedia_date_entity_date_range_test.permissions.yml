@@ -1,0 +1,11 @@
+'add test_entity_with_date_range entity':
+  title: 'Add test entity with date range'
+
+'edit test_entity_with_date_range entity':
+  title: 'Edit test entity with date range'
+
+'delete test_entity_with_date_range entity':
+  title: 'Delete test entity with date range'
+
+'administer test_entity_with_date_range entity':
+  title: 'Administer test entity with date range'

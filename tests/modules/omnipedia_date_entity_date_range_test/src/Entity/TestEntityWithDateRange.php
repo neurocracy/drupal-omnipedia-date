@@ -22,8 +22,16 @@ use Drupal\omnipedia_date\Entity\EntityWithDateRangeTrait;
  *     "id"   = "id",
  *     "uuid" = "uuid",
  *   },
+ *   admin_permission = "administer test_entity_with_date_range entity",
+ *   handlers = {
+ *     "form" = {
+ *       "default" = "Drupal\Core\Entity\ContentEntityForm",
+ *     },
+ *     "access" = "Drupal\omnipedia_date_entity_date_range_test\Access\TestEntityWithDateRangeAccessControlHandler",
+ *   },
  *   links = {
  *     "canonical" = "/omnipedia_date_entity_date_range_test/{test_entity_with_date_range}",
+ *     "edit-form" = "/omnipedia_date_entity_date_range_test/{test_entity_with_date_range}/edit",
  *   },
  * )
  *
