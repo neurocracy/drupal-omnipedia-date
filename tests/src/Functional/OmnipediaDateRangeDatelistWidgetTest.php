@@ -164,14 +164,11 @@ class OmnipediaDateRangeDatelistWidgetTest extends BrowserTestBase {
   }
 
   /**
-   * Test setting and getting date range values on the test entity type.
+   * Test that saved date range on the test entity is pre-filled on edit form.
    *
    * @dataProvider entityDateRangeProvider
-   *
-   * @todo Also submit the form with new values to verify that works and the new
-   *   values are set in the form the next time around.
    */
-  public function testEditForm(array $values, array $expected): void {
+  public function testEditFormLoad(array $values, array $expected): void {
 
     /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */
     $storage = $this->entityTypeManager->getStorage(self::TEST_ENTITY_TYPE);
@@ -195,6 +192,61 @@ class OmnipediaDateRangeDatelistWidgetTest extends BrowserTestBase {
       );
 
     }
+
+  }
+
+  /**
+   * Test that submitting the test entity edit form updates date range values.
+   *
+   * @dataProvider entityDateRangeProvider
+   */
+  public function testEditFormSubmit(array $values, array $expected): void {
+
+    /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */
+    $storage = $this->entityTypeManager->getStorage(self::TEST_ENTITY_TYPE);
+
+    /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface */
+    $entity = $storage->create(['date_range' => [
+      'value'     => null,
+      'end_value' => null,
+    ]]);
+
+    $storage->save($entity);
+
+    $this->drupalGet($entity->toUrl('edit-form'));
+
+    $submitValues = [];
+
+    foreach ($values['date_range'] as $valueKey => $value) {
+
+      /** @var string The name of our <select> element. */
+      $selectName = 'date_range[0][' . $valueKey . ']';
+
+      $submitValues[$selectName] = $expected[$valueKey];
+
+    }
+
+    $this->submitForm($submitValues, 'Save');
+
+    foreach ($values['date_range'] as $valueKey => $value) {
+
+      /** @var string The name of our <select> element. */
+      $selectName = 'date_range[0][' . $valueKey . ']';
+
+      $this->assertSession()->selectExists($selectName);
+
+      $this->assertSession()->fieldValueEquals(
+        $selectName, $expected[$valueKey],
+      );
+
+    }
+
+    /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface */
+    $reloadedEntity = $storage->load($entity->id());
+
+    $this->assertEquals($expected['value'], $reloadedEntity->getStartDate());
+
+    $this->assertEquals($expected['end_value'], $reloadedEntity->getEndDate());
 
   }
 
