@@ -6,6 +6,8 @@ namespace Drupal\omnipedia_date\Service;
 
 use Drupal\Core\State\StateInterface;
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
+use Drupal\omnipedia_date\Service\DateCollectionInterface;
+use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
