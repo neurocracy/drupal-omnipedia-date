@@ -78,7 +78,7 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
     // If there's a 'node' route parameter, attempt to resolve it to a wiki
     // node. Note that the 'node' parameter is not upcast into a Node object if
     // viewing a (Drupal) revision other than the currently published one.
-    /** @var \Drupal\omnipedia_core\Entity\NodeInterface|null */
+    /** @var \Drupal\node\NodeInterface|null */
     $node = $this->wikiNodeResolver->resolveNode(
       $this->currentRouteMatch->getParameter('node')
     );
