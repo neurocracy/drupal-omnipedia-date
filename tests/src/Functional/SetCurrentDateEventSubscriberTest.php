@@ -166,9 +166,9 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 
       }
 
-      $this->nodes = $nodes;
-
     }
+
+    $this->nodes = $nodes;
 
   }
 
