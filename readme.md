@@ -15,7 +15,7 @@ and formatters.
 
 Note that this does not does not contain the framework to manage the simulated
 wiki pages (Drupal nodes) themselves; that can be found in the [`omnipedia_core`
-module](https://github.com/neurocracy/drupal-omnipedia-core).
+module](https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-core).
 
 ----
 
@@ -31,7 +31,7 @@ module](https://github.com/neurocracy/drupal-omnipedia-core).
 
 Follow the Composer installation instructions for these dependencies first:
 
-* The [`omnipedia_core` module](https://github.com/neurocracy/drupal-omnipedia-core).
+* The [`omnipedia_core` module](https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-core).
 
 ----
 
@@ -54,9 +54,10 @@ should get you up and running.
 In your root `composer.json`, add the following to the `"repositories"` section:
 
 ```json
-"drupal/omnipedia_date": {
+{
   "type": "vcs",
-  "url": "https://github.com/neurocracy/drupal-omnipedia-date.git"
+  "url": "https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-date.git",
+  "only": ["drupal/omnipedia_date"]
 }
 ```
 
