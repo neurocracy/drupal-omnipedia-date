@@ -1,0 +1,10 @@
+services:
+
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  omnipedia_date_refreshless.kernel_set_current_date_event_subscriber:
+    class: Drupal\omnipedia_date_refreshless\EventSubscriber\Kernel\SetCurrentDateEventSubscriber
+    decorates: omnipedia_date.kernel_set_current_date_event_subscriber
+    public: false
