@@ -136,4 +136,25 @@ class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
 
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getYear(): string {
+    return $this->dateObject->format('Y');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMonth(): string {
+    return $this->dateObject->format('m');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDay(): string {
+    return $this->dateObject->format('d');
+  }
+
 }
