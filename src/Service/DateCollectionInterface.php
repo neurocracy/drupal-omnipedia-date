@@ -16,8 +16,10 @@ interface DateCollectionInterface {
    * Get the Omnipedia date plug-in instance for the specified date.
    *
    * @param string $date
+   *   A date string in storage format.
    *
    * @return \Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface
+   *   An Omnipedia date plug-in instance for the specified date
    */
   public function get(string $date): OmnipediaDateInterface;
 
