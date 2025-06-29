@@ -22,6 +22,17 @@ interface DateCollectionInterface {
   public function get(string $date): OmnipediaDateInterface;
 
   /**
+   * Determine if the provided date is in the collection.
+   *
+   * @param string $date
+   *   A date string in storage format.
+   *
+   * @return bool
+   *   True if the provided date is found in the collection, false otherwise.
+   */
+  public function has(string $date): bool;
+
+  /**
    * Get the Omnipedia date plug-in instance given a DateTimePlus object.
    *
    * Note that the DateTimePlus object provided will only be used as the input
