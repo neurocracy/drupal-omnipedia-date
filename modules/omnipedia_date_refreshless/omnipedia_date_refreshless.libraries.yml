@@ -2,5 +2,8 @@ set_current_date_header:
   js:
     javascript/set_current_date_header.js: { attributes: { defer: true } }
   dependencies:
-    - ambientimpact_core/component.fastdom
     - ambientimpact_core/framework
+  drupalSettings:
+    omnipedia:
+      currentDate: ''
+      setDateHeaderName: ''

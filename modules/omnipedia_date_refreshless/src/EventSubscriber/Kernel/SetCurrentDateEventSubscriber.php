@@ -8,6 +8,7 @@ use Drupal\omnipedia_date\EventSubscriber\Kernel\SetCurrentDateEventSubscriber a
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DateResolverInterface;
 use Drupal\omnipedia_date\Service\DefinedDatesInterface;
+use Drupal\omnipedia_date_refreshless\OmnipediaDateSettingsInterface;
 use Drupal\refreshless\Service\RequestWrapperFactoryInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
@@ -15,12 +16,22 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * Event subscriber to update the current date if header sent via RefreshLess.
+ */
 class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
-
-  protected const DATE_HEADER_NAME = 'X-Omnipedia-Set-Current-Date';
 
   /**
    * Service constructor; saves dependencies.
+   *
+   * @param \Drupal\omnipedia_date\Service\CurrentDateInterface $currentDate
+   *   The Omnipedia current date service.
+   *
+   * @param \Drupal\omnipedia_date\Service\DateResolverInterface $dateResolver
+   *   The Omnipedia date resolver service.
+   *
+   * @param \Drupal\omnipedia_date\Service\DefinedDatesInterface $definedDates
+   *   The Omnipedia defined dates service.
    *
    * @param \Drupal\omnipedia_date\EventSubscriber\Kernel\SetCurrentDateEventSubscriber $decorated
    *   The event subscriber that we decorate.
@@ -49,6 +60,12 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
     ];
   }
 
+  /**
+   * Update the current date if our header is sent with a RefreshLess request.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   *   Symfony request event object.
+   */
   public function onKernelRequest(RequestEvent $event): void {
 
     $request = $event->getRequest();
@@ -57,7 +74,9 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
 
     if (
       $requestWrapper->isRefreshless() === false ||
-      $request->headers->has(self::DATE_HEADER_NAME) === false
+      $request->headers->has(
+        OmnipediaDateSettingsInterface::SET_DATE_HEADER_NAME,
+      ) === false
     ) {
 
       $this->decorated->onKernelRequest($event);
@@ -66,19 +85,18 @@ class SetCurrentDateEventSubscriber implements EventSubscriberInterface {
 
     }
 
-    $date = $this->dateResolver->resolve(
-      $request->headers->get(self::DATE_HEADER_NAME),
-    );
+    // This validates and parses the date format. Will throw an exception if
+    // that fails.
+    $date = $this->dateResolver->resolve($request->headers->get(
+      OmnipediaDateSettingsInterface::SET_DATE_HEADER_NAME,
+    ));
 
     $definedDates = $this->definedDates->get();
 
+    // Ensure we only set a date that's already defined.
     if (!in_array($date->format('storage'), $definedDates)) {
       return;
     }
-
-    \Drupal::logger('omnipedia_date_refreshless')->debug(
-      'Set current date from header: ' . $date->format('storage'),
-    );
 
     $this->currentDate->set($date->format('storage'));
 

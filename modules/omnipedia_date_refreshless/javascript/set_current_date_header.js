@@ -1,7 +1,6 @@
 // -----------------------------------------------------------------------------
 //   Omnipedia RefreshLess component to send the current date as a header
 // -----------------------------------------------------------------------------
-AmbientImpact.on(['fastdom',], function(aiFastDom) {
 AmbientImpact.addComponent(
   'OmnipediaRefreshlessSetCurrentDateHeader',
 (component, $) => {
@@ -15,40 +14,39 @@ AmbientImpact.addComponent(
    */
   const eventNamespace = component.getName();
 
-  /**
-   * FastDom instance.
-   *
-   * @type {FastDom}
-   */
-  const fastdom = aiFastDom.getInstance();
-
   component.addBehaviour(
     component.getName(),
     'omnipedia-refreshless-send-current-date',
-    'body',
-    async function(context, settings) {
+    'html',
+    function(context, settings) {
 
-      // @todo Output the current date to drupalSettings.omnipedia and use that.
-      const $date = $('.omnipedia-header__current-date', context);
+      $(this).on(`refreshless:before-fetch-request.${eventNamespace}`, (
+        event,
+      ) => {
 
-      const date = await fastdom.measure(() => $date.attr('datetime'));
+        const date = settings.omnipedia.currentDate;
 
-      $(this)
-      .on(`refreshless:before-fetch-request.${eventNamespace}`, (event) => {
+        const headerName = settings.omnipedia.setDateHeaderName;
 
         if (
-          event.detail.isPrefetch === true ||
-          event.detail.isPreload === true ||
-          typeof date === 'undefined'
+          // This is currently primarily intended to search form submits,
+          // because those are one of the few requests that we don't/can't
+          // prefetch/preload and do not have a date in their URL so they get
+          // out of sync constantly as links are prefetched/preloaded
+          event.detail.isFormSubmit === false ||
+          // Validate the date and header names to prevent fetch failures if
+          // one of them was not output correctly by the back-end.
+          typeof date !== 'string' ||
+          date.length === 0 ||
+          typeof headerName !== 'string' ||
+          headerName.length === 0
         ) {
           return;
         }
 
         event.preventDefault();
 
-        event.detail.fetchOptions.headers[
-          'X-Omnipedia-Set-Current-Date'
-        ] = date;
+        event.detail.fetchOptions.headers[headerName] = date;
 
         event.detail.resume();
 
@@ -61,10 +59,9 @@ AmbientImpact.addComponent(
         return;
       }
 
-      $(this).off(`refreshless:before-fetch-request.${eventNamespace}`);
+      $(this).off(`.${eventNamespace}`);
 
     },
   );
 
-});
 });
