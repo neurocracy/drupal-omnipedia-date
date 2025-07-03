@@ -75,4 +75,28 @@ interface OmnipediaDateInterface {
    */
   public function format(string $format): string;
 
+  /**
+   * Get the year for this date.
+   *
+   * @return string
+   *   A year formatted as a string.
+   */
+  public function getYear(): string;
+
+  /**
+   * Get the month for this date.
+   *
+   * @return string
+   *   A month formatted as a string with a leading zero if a single digit.
+   */
+  public function getMonth(): string;
+
+  /**
+   * Get the day for this date.
+   *
+   * @return string
+   *   A day formatted as a string with a leading zero if a single digit.
+   */
+  public function getDay(): string;
+
 }

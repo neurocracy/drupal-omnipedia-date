@@ -61,6 +61,13 @@ class DateCollection implements DateCollectionInterface {
   /**
    * {@inheritdoc}
    */
+  public function has(string $date): bool {
+    return $this->datePluginCollection->has($date);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFromDateTimeObject(
     DateTimePlus $dateTime
   ): OmnipediaDateInterface {
