@@ -55,10 +55,6 @@ AmbientImpact.addComponent(
     },
     function(context, settings, trigger) {
 
-      if (trigger !== 'unload') {
-        return;
-      }
-
       $(this).off(`.${eventNamespace}`);
 
     },
