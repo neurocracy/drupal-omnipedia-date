@@ -57,10 +57,7 @@ trait EntityWithDateRangeTrait {
    */
   public function getStartDate(): string {
 
-    /** @var string|null */
-    $value = $this->date_range->value;
-
-    return $value === null ? 'first' : $value;
+    return $this->get('date_range')->first()->getStartDate();
 
   }
 
@@ -69,10 +66,7 @@ trait EntityWithDateRangeTrait {
    */
   public function getEndDate(): string {
 
-    /** @var string|null */
-    $value = $this->date_range->end_value;
-
-    return $value === null ? 'last' : $value;
+    return $this->get('date_range')->first()->getEndDate();
 
   }
 

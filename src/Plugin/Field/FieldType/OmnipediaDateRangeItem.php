@@ -7,6 +7,7 @@ namespace Drupal\omnipedia_date\Plugin\Field\FieldType;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
+use Drupal\omnipedia_date\Plugin\Field\FieldType\OmnipediaDateRangeItemInterface;
 
 /**
  * Plugin implementation of the 'omnipedia_daterange' field type.
@@ -34,7 +35,7 @@ use Drupal\datetime_range\Plugin\Field\FieldType\DateRangeItem;
  *   list_class         = "\Drupal\datetime_range\Plugin\Field\FieldType\DateRangeFieldItemList"
  * )
  */
-class OmnipediaDateRangeItem extends DateRangeItem {
+class OmnipediaDateRangeItem extends DateRangeItem implements OmnipediaDateRangeItemInterface {
 
   /**
    * {@inheritdoc}
@@ -58,4 +59,27 @@ class OmnipediaDateRangeItem extends DateRangeItem {
     return false;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getStartDate(): string {
+
+    /** @var string|null */
+    $value = $this->get('value')->getValue();
+
+    return $value === null ? 'first' : $value;
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEndDate(): string {
+
+    /** @var string|null */
+    $value = $this->get('end_value')->getValue();
+
+    return $value === null ? 'last' : $value;
+
+  }
 }
