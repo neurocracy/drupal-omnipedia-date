@@ -259,7 +259,7 @@ class EntityWithDateRangeTest extends KernelTestBase {
    *   reference.
    */
   public function testNonOverlappingEntityDateRange(
-    array $providerValues, array $expected,
+    array $values, array $expected,
   ): void {
 
     /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */
@@ -268,10 +268,10 @@ class EntityWithDateRangeTest extends KernelTestBase {
     /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface[] */
     $entities = [];
 
-    foreach ($providerValues as $key => $values) {
+    foreach ($values as $key => $fieldValues) {
 
       /** @var \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface */
-      $entities[$key] = $storage->create($values);
+      $entities[$key] = $storage->create($fieldValues);
 
       // The entities must be saved to storage so that
       // NonOverlappingEntityDateRangeValidator finds them when it runs the
