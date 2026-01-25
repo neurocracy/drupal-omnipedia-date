@@ -14,10 +14,14 @@ services:
       - '@omnipedia_date.default_date'
       - '@session'
 
+  Drupal\omnipedia_date\Service\CurrentDateInterface: '@omnipedia_date.current_date'
+
   omnipedia_date.date_collection:
     class: Drupal\omnipedia_date\Service\DateCollection
     arguments:
       - '@plugin.manager.omnipedia_date'
+
+  Drupal\omnipedia_date\Service\DateCollectionInterface: '@omnipedia_date.date_collection'
 
   omnipedia_date.date_resolver:
     class: Drupal\omnipedia_date\Service\DateResolver
@@ -27,17 +31,23 @@ services:
       - '@omnipedia_date.default_date'
       - '@omnipedia_date.defined_dates'
 
+  Drupal\omnipedia_date\Service\DateResolverInterface: '@omnipedia_date.date_resolver'
+
   omnipedia_date.default_date:
     class: Drupal\omnipedia_date\Service\DefaultDate
     arguments:
       - '@omnipedia_date.date_collection'
       - '@state'
 
+  Drupal\omnipedia_date\Service\DefaultDateInterface: '@omnipedia_date.default_date'
+
   omnipedia_date.defined_dates:
     class: Drupal\omnipedia_date\Service\DefinedDates
     arguments:
       - '@omnipedia.wiki_node_tracker'
       - '@state'
+
+  Drupal\omnipedia_date\Service\DefinedDatesInterface: '@omnipedia_date.defined_dates'
 
   omnipedia_date.entity_update_defined_dates_event_subscriber:
     class: Drupal\omnipedia_date\EventSubscriber\Entity\UpdateDefinedDatesEventSubscriber
@@ -84,6 +94,10 @@ services:
       - '@omnipedia_date.defined_dates'
       - '@string_translation'
 
+  Drupal\omnipedia_date\Service\TimelineInterface: '@omnipedia.timeline'
+
   plugin.manager.omnipedia_date:
     class: Drupal\omnipedia_date\PluginManager\OmnipediaDateManager
     parent: default_plugin_manager
+
+  Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface: '@plugin.manager.omnipedia_date'
