@@ -23,9 +23,9 @@ module](https://gitlab.com/neurocracy/omnipedia/modules/omnipedia-core).
 
 # Requirements
 
-* [Drupal 9.5, 10, or 11](https://www.drupal.org/download) ([Drupal 8 is end-of-life](https://www.drupal.org/psa-2021-11-30))
+* [Drupal 10.5 or 11.2](https://www.drupal.org/download)
 
-* PHP 8.1
+* PHP 8.2
 
 * [Composer](https://getcomposer.org/)
 
