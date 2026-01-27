@@ -86,9 +86,7 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
-    'omnipedia_date', 'omnipedia_date_current_date_test',
-  ];
+  protected static $modules = ['omnipedia_core_wiki_node_test_dependencies'];
 
   /**
    * Node objects for the tests, keyed by their nid.
@@ -103,6 +101,15 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
   protected function setUp(): void {
 
     parent::setUp();
+
+    // We're installing these here rather than in $modules to work around
+    // field.storage.node.body not being found, giving the test module above a
+    // chance to install it before omnipedia_core is installed.
+    //
+    // @see https://gitlab.com/neurocracy/omnipedia/omnipedia/-/work_items/77
+    $this->container->get('module_installer')->install([
+      'omnipedia_date', 'omnipedia_date_current_date_test',
+    ]);
 
     $definedDates = static::generateWikiDates();
 
