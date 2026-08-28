@@ -148,17 +148,36 @@ abstract class OmnipediaDateRangeBase extends FilterPluginBase {
 
     $this->ensureMyTable();
 
+    // Prevents fatal error in Drupal core >= 10.1 due to this being an array if
+    // the operator is not an array compatible one. In our case, our plug-ins
+    // won't have an array compatible operator, so would always trigger the
+    // fatal error.
+    //
+    // @see https://www.drupal.org/node/3350985
+    //
+    // @see \Drupal\Core\Database\Query\Condition::condition()
+    if (
+      \is_array($this->value) &&
+      count($this->value) === 1 &&
+      \in_array($this->operator, [
+        '=', '<', '>', '<=', '>=', 'IS NULL', 'IS NOT NULL',
+      ], true)
+    ) {
+      $value = \reset($this->value);
+    } else {
+      $value = $this->value;
+    }
+
     $this->query->addWhere(
       $this->options['group'],
       (new Condition('OR'))
         ->condition(
-          "$this->tableAlias.$this->realField", $this->value, $this->operator,
+          "$this->tableAlias.$this->realField", $value, $this->operator,
         )
         ->condition(
-          "$this->tableAlias.$this->realField", $this->value, 'IS NULL',
+          "$this->tableAlias.$this->realField", $value, 'IS NULL',
         )
     );
-
   }
 
 }
