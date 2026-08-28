@@ -6,18 +6,20 @@ namespace Drupal\omnipedia_date\Plugin\Omnipedia\Date;
 
 use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\omnipedia_date\Attribute\OmnipediaDate as OmnipediaDateAttribute;
+use Drupal\omnipedia_date\Plugin\Deriver\OmnipediaDateDeriver;
 use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 
 /**
  * The Omnipedia Date plug-in.
- *
- * @OmnipediaDate(
- *   id           = "date",
- *   title        = @Translation("Omnipedia Date"),
- *   description  = @Translation("The Omnipedia Date plug-in."),
- *   deriver      = "Drupal\omnipedia_date\Plugin\Deriver\OmnipediaDateDeriver"
- * )
  */
+#[OmnipediaDateAttribute(
+  id: 'date',
+  title: new TranslatableMarkup('Omnipedia Date'),
+  description: new TranslatableMarkup('The Omnipedia Date plug-in.'),
+  deriver: OmnipediaDateDeriver::class,
+)]
 class OmnipediaDate extends PluginBase implements OmnipediaDateInterface {
 
   /**

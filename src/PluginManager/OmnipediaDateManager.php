@@ -8,6 +8,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\omnipedia_date\Annotation\OmnipediaDate as OmnipediaDateAnnotation;
+use Drupal\omnipedia_date\Attribute\OmnipediaDate as OmnipediaDateAttribute;
 use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 use Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface;
 
@@ -57,7 +58,12 @@ class OmnipediaDateManager extends DefaultPluginManager implements OmnipediaDate
       // interface, Drupal will throw an error.
       OmnipediaDateInterface::class,
 
+      // The name of the attribute that contains the plug-in definition.
+      OmnipediaDateAttribute::class,
+
       // The name of the annotation class that contains the plug-in definition.
+      //
+      // @phpstan-ignore classConstant.deprecatedClass
       OmnipediaDateAnnotation::class
 
     );
