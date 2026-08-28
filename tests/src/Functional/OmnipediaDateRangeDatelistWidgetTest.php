@@ -10,14 +10,16 @@ use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\omnipedia_core\Traits\WikiNodeProvidersTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for OmnipediaDateRangeDatelistWidget.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class OmnipediaDateRangeDatelistWidgetTest extends BrowserTestBase {
 
   use WikiNodeProvidersTrait;
@@ -191,9 +193,8 @@ class OmnipediaDateRangeDatelistWidgetTest extends BrowserTestBase {
 
   /**
    * Test that saved date range on the test entity is pre-filled on edit form.
-   *
-   * @dataProvider entityDateRangeProvider
    */
+  #[DataProvider('entityDateRangeProvider')]
   public function testEditFormLoad(array $values, array $expected): void {
 
     /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */
@@ -223,9 +224,8 @@ class OmnipediaDateRangeDatelistWidgetTest extends BrowserTestBase {
 
   /**
    * Test that submitting the test entity edit form updates date range values.
-   *
-   * @dataProvider entityDateRangeProvider
    */
+  #[DataProvider('entityDateRangeProvider')]
   public function testEditFormSubmit(array $values, array $expected): void {
 
     /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */

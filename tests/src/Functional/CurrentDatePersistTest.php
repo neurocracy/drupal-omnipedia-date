@@ -9,14 +9,16 @@ use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for the Omnipedia current date service and persisting the date.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class CurrentDatePersistTest extends BrowserTestBase {
 
   /**
@@ -154,9 +156,8 @@ class CurrentDatePersistTest extends BrowserTestBase {
 
   /**
    * Test that setting the current date persists between requests.
-   *
-   * @dataProvider defaultDatesProvider
    */
+  #[DataProvider('defaultDatesProvider')]
   public function testPersistentCurrentDate(string $date): void {
 
     $this->defaultDate->set($date);

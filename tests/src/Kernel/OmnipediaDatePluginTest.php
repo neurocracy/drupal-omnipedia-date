@@ -8,14 +8,15 @@ use Drupal\Component\Datetime\DateTimePlus;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDate;
 use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for the Omnipedia date plug-in.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class OmnipediaDatePluginTest extends KernelTestBase {
 
   /**

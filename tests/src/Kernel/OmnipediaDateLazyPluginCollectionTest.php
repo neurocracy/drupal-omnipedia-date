@@ -8,18 +8,19 @@ use Drupal\Core\State\StateInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\omnipedia_date\PluginCollection\OmnipediaDateLazyPluginCollection;
 use Drupal\omnipedia_date\PluginManager\OmnipediaDateManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for the Omnipedia date lazy plug-in collection.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  *
  * @see \Drupal\Tests\Core\Plugin\DefaultLazyPluginCollectionTest
  *
  * @see \Drupal\Tests\Core\Plugin\LazyPluginCollectionTestBase
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class OmnipediaDateLazyPluginCollectionTest extends KernelTestBase {
 
   /**

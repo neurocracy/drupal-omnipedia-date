@@ -7,14 +7,16 @@ namespace Drupal\Tests\omnipedia_date\Kernel;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for the Omnipedia current date service.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class CurrentDateTest extends KernelTestBase {
 
   /**
@@ -99,9 +101,8 @@ class CurrentDateTest extends KernelTestBase {
 
   /**
    * Test setting and getting the current date.
-   *
-   * @dataProvider defaultDatesProvider
    */
+  #[DataProvider('defaultDatesProvider')]
   public function testSetCurrentDate(string $date): void {
 
     $this->defaultDate->set($date);
@@ -119,9 +120,8 @@ class CurrentDateTest extends KernelTestBase {
 
   /**
    * Test that the default date is used as the start value for the current date.
-   *
-   * @dataProvider defaultDatesProvider
    */
+  #[DataProvider('defaultDatesProvider')]
   public function testDefaultDate(string $date): void {
 
     $this->defaultDate->set($date);

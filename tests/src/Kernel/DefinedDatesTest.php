@@ -7,14 +7,16 @@ namespace Drupal\Tests\omnipedia_date\Kernel;
 use Drupal\Core\State\StateInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\omnipedia_core\Service\WikiNodeTrackerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for the Omnipedia defined dates service.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class DefinedDatesTest extends KernelTestBase {
 
   /**
@@ -131,9 +133,8 @@ class DefinedDatesTest extends KernelTestBase {
 
   /**
    * Test building list of dates returned by a mocked wiki node tracker.
-   *
-   * @dataProvider findDefinedDatesProvider
    */
+  #[DataProvider('findDefinedDatesProvider')]
   public function testFindDefinedDates(array $data, array $expected): void {
 
     /** @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface */
@@ -212,9 +213,8 @@ class DefinedDatesTest extends KernelTestBase {
 
   /**
    * Test getting defined dates.
-   *
-   * @dataProvider getDefinedDatesProvider
    */
+  #[DataProvider('getDefinedDatesProvider')]
   public function testGetDefinedDates(array $dates): void {
 
     /** @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface */
@@ -249,9 +249,8 @@ class DefinedDatesTest extends KernelTestBase {
 
   /**
    * Test getting the first defined date.
-   *
-   * @dataProvider getDefinedDatesProvider
    */
+  #[DataProvider('getDefinedDatesProvider')]
   public function testGetFirstDate(array $dates): void {
 
     /** @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface */
@@ -292,9 +291,8 @@ class DefinedDatesTest extends KernelTestBase {
 
   /**
    * Test getting the last defined date.
-   *
-   * @dataProvider getDefinedDatesProvider
    */
+  #[DataProvider('getDefinedDatesProvider')]
   public function testGetLastDate(array $dates): void {
 
     /** @var \Drupal\omnipedia_core\Service\WikiNodeTrackerInterface */

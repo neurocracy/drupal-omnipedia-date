@@ -8,14 +8,15 @@ use Drupal\Core\Config\PreExistingConfigException;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for the 'system_site_information_settings' form alter.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class SystemSiteInformationFormAlterTest extends BrowserTestBase {
 
   /**

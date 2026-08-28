@@ -9,18 +9,18 @@ use Drupal\omnipedia_date\Plugin\Omnipedia\Date\OmnipediaDateInterface;
 use Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface;
 use Drupal\omnipedia_date\Value\OmnipediaDateRange;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Provides unit tests for the OmnipediaDateRange value object.
  *
- * @coversDefaultClass \Drupal\omnipedia_date\Value\OmnipediaDateRange
- *
- * @group omnipedia
- *
- * @group omnipedia_date
- *
  * @see \Drupal\Tests\Component\Datetime\DateTimePlusTest
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[CoversClass(OmnipediaDateRange::class)]
 class OmnipediaDateRangeTest extends UnitTestCase {
 
   /**
@@ -107,9 +107,8 @@ class OmnipediaDateRangeTest extends UnitTestCase {
 
   /**
    * Test various valid date range start and end dates.
-   *
-   * @dataProvider validDateRangesProvider
    */
+  #[DataProvider('validDateRangesProvider')]
   public function testValidDateRanges(
     string $startDate, string $endDate,
   ): void {
@@ -151,9 +150,8 @@ class OmnipediaDateRangeTest extends UnitTestCase {
 
   /**
    * Test that various invalid date range start and end dates throw exceptions.
-   *
-   * @dataProvider invalidDateRangesProvider
    */
+  #[DataProvider('invalidDateRangesProvider')]
   public function testInvalidDateRanges(
     string $startDate, string $endDate,
   ): void {
@@ -203,9 +201,8 @@ class OmnipediaDateRangeTest extends UnitTestCase {
 
   /**
    * Test that the date range overlap method correctly identifies such ranges.
-   *
-   * @dataProvider overlapsWithRangeProvider
    */
+  #[DataProvider('overlapsWithRangeProvider')]
   public function testOverlapsWithRange(
     array $dateRange1Values, array $dateRange2Values, bool $expectOverlap,
   ): void {
@@ -246,9 +243,8 @@ class OmnipediaDateRangeTest extends UnitTestCase {
 
   /**
    * Test that the date overlap method correctly identifies such dates.
-   *
-   * @dataProvider overlapsWithDateProvider
    */
+  #[DataProvider('overlapsWithDateProvider')]
   public function testOverlapsDate(string $date, bool $expectOverlap): void {
 
     /** @var \Drupal\omnipedia_date\Value\OmnipediaDateRangeInterface */

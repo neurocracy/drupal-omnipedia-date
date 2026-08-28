@@ -6,14 +6,16 @@ namespace Drupal\Tests\omnipedia_date\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for the Omnipedia default date service.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class DefaultDateTest extends KernelTestBase {
 
   /**
@@ -89,9 +91,8 @@ class DefaultDateTest extends KernelTestBase {
 
   /**
    * Test setting and getting the default date.
-   *
-   * @dataProvider defaultDatesProvider
    */
+  #[DataProvider('defaultDatesProvider')]
   public function testSetGetDefaultDates(string $date): void {
 
     $this->defaultDate->set($date);

@@ -14,13 +14,12 @@ use Drupal\omnipedia_date\Service\DefaultDateInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\omnipedia_core\Traits\WikiNodeProvidersTrait;
 use Drupal\typed_entity\EntityWrapperInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for EventSubscriber\Kernel\SetCurrentDateEventSubscriber.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  *
  * @see \Drupal\omnipedia_date_current_date_test\EventSubscriber\Kernel\CurrentDateHeaderEventSubscriber
  *   Event subscriber that outputs the current date as an HTTP header to work
@@ -31,6 +30,9 @@ use Drupal\typed_entity\EntityWrapperInterface;
  *   Uses the same approach to getting session data via HTTP headers output by
  *   an event subscriber in a test module.
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
 
   use WikiNodeProvidersTrait;
@@ -250,11 +252,10 @@ class SetCurrentDateEventSubscriberTest extends BrowserTestBase {
   /**
    * Test that visiting various wiki node canonical routes updates current date.
    *
-   * @dataProvider canonicalRouteUserTypeProvider
-   *
    * @todo Also test that the current date remains that of the last wiki node
    *   visited when visiting a non-wiki node.
    */
+  #[DataProvider('canonicalRouteUserTypeProvider')]
   public function testCanonicalRoute(bool|array $userParameters): void {
 
     if (\is_array($userParameters)) {

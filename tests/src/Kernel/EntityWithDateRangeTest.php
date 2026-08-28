@@ -9,18 +9,20 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface;
 use Drupal\omnipedia_date\Service\CurrentDateInterface;
 use Drupal\omnipedia_date\Service\DefaultDateInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for entities with date ranges.
- *
- * @group omnipedia
- *
- * @group omnipedia_date
  *
  * @see \Drupal\omnipedia_date\Entity\EntityWithDateRangeInterface
  *
  * @see \Drupal\omnipedia_date\Entity\EntityWithDateRangeTrait
  */
+#[Group('omnipedia')]
+#[Group('omnipedia_date')]
+#[RunTestsInSeparateProcesses]
 class EntityWithDateRangeTest extends KernelTestBase {
 
   /**
@@ -168,9 +170,8 @@ class EntityWithDateRangeTest extends KernelTestBase {
 
   /**
    * Test setting and getting date range values on the test entity type.
-   *
-   * @dataProvider entityDateRangeProvider
    */
+  #[DataProvider('entityDateRangeProvider')]
   public function testEntityDateRange(array $values, array $expected): void {
 
     /** @var \Drupal\Core\Entity\EntityStorageInterface The entity storage for this entity type. */
@@ -252,12 +253,11 @@ class EntityWithDateRangeTest extends KernelTestBase {
   /**
    * Test the non-overlapping date range constraint validation.
    *
-   * @dataProvider nonOverlappingEntityDateRangeProvider
-   *
    * @see \Drupal\KernelTests\Core\Entity\EntityFieldTest::testEntityConstraintValidation()
    *   Core class testing entity field constraint validation; used for
    *   reference.
    */
+  #[DataProvider('nonOverlappingEntityDateRangeProvider')]
   public function testNonOverlappingEntityDateRange(
     array $values, array $expected,
   ): void {
