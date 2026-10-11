@@ -67,7 +67,7 @@ class OmnipediaDate extends InOperator {
    * {@inheritdoc}
    */
   public function init(
-    ViewExecutable $view, DisplayPluginBase $display, array &$options = null,
+    ViewExecutable $view, DisplayPluginBase $display, ?array &$options = null,
   ) {
 
     parent::init($view, $display, $options);
