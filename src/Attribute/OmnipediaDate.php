@@ -18,7 +18,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 class OmnipediaDate extends Plugin {
 
   /**
-   * Constructs a Rebuilder attribute.
+   * Constructs an OmnipediaDate attribute.
    *
    * @param string $id
    *   The plug-in ID.
